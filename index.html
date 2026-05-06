@@ -9,7 +9,7 @@
 @media(prefers-color-scheme:dark){:root{--color-background-primary:#1e1e1c;--color-background-secondary:#2a2a28;--color-background-tertiary:#333331;--color-text-primary:#f0ede8;--color-text-secondary:#a0a09e;--color-text-tertiary:#6b6b69;--color-border-tertiary:rgba(255,255,255,0.1);--color-border-secondary:rgba(255,255,255,0.2);--color-border-primary:rgba(255,255,255,0.3)}}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);background:var(--color-background-tertiary);color:var(--color-text-primary);min-height:100vh}
-.page{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
 .page-header{margin-bottom:1.5rem}
 .page-header h1{font-size:20px;font-weight:500;margin-bottom:4px}
 .page-header p{font-size:13px;color:var(--color-text-secondary)}
@@ -20,8 +20,9 @@ button.tab:hover{color:var(--color-text-primary)}
 button.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary)}
 .badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px}
 .b-red{background:#FCEBEB;color:#A32D2D}.b-amber{background:#FAEEDA;color:#633806}.b-blue{background:#E6F1FB;color:#185FA5}.b-green{background:#E1F5EE;color:#0F6E56}
-.tbl-wrap{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;max-height:560px;overflow-y:auto}
-.sort-table{width:100%;border-collapse:collapse;font-size:13px}
+.tbl-outer{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;max-height:620px;display:flex;flex-direction:column}
+.tbl-scroll{overflow:auto;flex:1}
+.sort-table{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
 .sort-table th{text-align:center;padding:6px 8px;font-weight:500;font-size:11px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;user-select:none;background:var(--color-background-secondary);white-space:nowrap;position:sticky;top:0;z-index:2}
 .sort-table th.th-url{text-align:left}
 .sort-table th:hover,.sort-table th.sorted{color:var(--color-text-primary)}
@@ -45,7 +46,7 @@ button.tab.active{color:var(--color-text-primary);border-bottom-color:var(--colo
 .chevron.open{transform:rotate(90deg)}
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
 select,input[type=text]{font-size:13px;font-family:var(--font-sans);background:var(--color-background-primary);color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 10px;outline:none}
-.filter-bar input[type=text]{flex:1;min-width:140px}
+.filter-bar input[type=text]{flex:1;min-width:160px}
 select:focus,input[type=text]:focus{border-color:var(--color-border-primary)}
 button{font-size:13px;font-family:var(--font-sans);background:transparent;color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 14px;cursor:pointer;transition:background .12s}
 button:hover{background:var(--color-background-secondary)}
@@ -60,29 +61,6 @@ button:active{transform:scale(0.98)}
 .mini-bar-bg{flex:1;background:var(--color-background-secondary);border-radius:3px;height:7px}
 .mini-bar-fill{height:7px;border-radius:3px}
 .type-nums{font-size:12px;color:var(--color-text-secondary);min-width:180px;text-align:right}
-.graph-layout{display:grid;grid-template-columns:1fr 220px;gap:12px;align-items:start}
-.graph-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
-.focus-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-primary);padding:12px}
-.fp-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fp-url{font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;word-break:break-all;white-space:normal;line-height:1.4}
-.fp-section-title{font-size:11px;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
-.fp-link{font-size:12px;color:var(--color-text-secondary);padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
-.fp-link:hover{color:var(--color-text-primary)}
-.fp-link:last-child{border:none}
-.fp-empty{font-size:12px;color:var(--color-text-tertiary);font-style:italic}
-.graph-controls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
-.graph-controls input{flex:1;min-width:120px}
-.graph-controls button{font-size:12px;padding:5px 10px}
-.filter-pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
-.mpill{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:20px;cursor:pointer;border:1.5px solid transparent;color:var(--color-text-secondary);transition:all .12s}
-.mpill:hover{background:var(--color-background-secondary)}
-.mpill.active{border-color:currentColor;background:var(--color-background-secondary)}
-.tpill{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;cursor:pointer;border:1.5px solid transparent;margin:2px;transition:all .1s}
-.tpill:hover{opacity:.85}
-.tpill.active{border-color:currentColor}
-.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-canvas{display:block;cursor:grab}
-canvas.dragging{cursor:grabbing}
 #tbl-count{font-size:12px;color:var(--color-text-secondary);margin-top:8px}
 textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px;background:var(--color-background-secondary);color:var(--color-text-primary);resize:vertical;outline:none}
 .toggle-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:10px;font-size:13px}
@@ -95,62 +73,27 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
 .info-box{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:10px;line-height:1.6}
 .params-input{font-size:12px;font-family:var(--font-mono);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 8px;background:var(--color-background-primary);color:var(--color-text-primary);width:100%;margin-top:6px;outline:none}
 .col-sep{border-left:1px solid var(--color-border-tertiary) !important}
-code{font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:1px 5px;border-radius:3px}
 </style>
 </head>
 <body>
 <div class="page">
   <div class="page-header">
     <h1>Maillage interne — Embaleo</h1>
-    <p>Visualisez et analysez le maillage interne de votre site</p>
+    <p>Analysez et optimisez le maillage interne de votre site</p>
   </div>
   <div class="card">
     <div class="tab-bar">
-      <button class="tab active" onclick="switchTab('graph')">Graphe</button>
-      <button class="tab" onclick="switchTab('table')">Tableau</button>
+      <button class="tab active" onclick="switchTab('table')">Tableau</button>
       <button class="tab" onclick="switchTab('stats')">Statistiques</button>
       <button class="tab" onclick="switchTab('import')">Importer</button>
     </div>
 
-    <div id="tab-graph">
+    <!-- TABLEAU -->
+    <div id="tab-table">
       <div class="toggle-row">
-        <label class="toggle-switch"><input type="checkbox" id="toggle-pagination" checked onchange="rebuildAndRender()"><span class="toggle-slider"></span></label>
-        <div><span style="font-weight:500">Exclure les URLs de pagination</span> <span style="color:var(--color-text-secondary);margin-left:6px" id="pagination-count"></span></div>
-      </div>
-      <div class="graph-controls">
-        <input type="text" id="g-search" placeholder="Rechercher une URL..." oninput="renderGraph()">
-        <button onclick="resetZoom()">Réinitialiser vue</button>
-        <button onclick="autoLayout()">Réorganiser</button>
-      </div>
-      <div class="filter-pills">
-        <span style="font-size:12px;color:var(--color-text-secondary);line-height:28px;margin-right:2px">Maillage :</span>
-        <div class="mpill" data-m="orphan" onclick="toggleMF('orphan')" style="color:#A32D2D"><div class="dot" style="background:#E24B4A"></div>Orphelines</div>
-        <div class="mpill" data-m="weak" onclick="toggleMF('weak')" style="color:#854F0B"><div class="dot" style="background:#EF9F27"></div>Faibles</div>
-        <div class="mpill" data-m="normal" onclick="toggleMF('normal')" style="color:#185FA5"><div class="dot" style="background:#378ADD"></div>Normales</div>
-        <div class="mpill" data-m="hub" onclick="toggleMF('hub')" style="color:#0F6E56"><div class="dot" style="background:#1D9E75"></div>Hubs</div>
-        <span style="font-size:12px;color:var(--color-text-secondary);line-height:28px;margin-left:8px;margin-right:2px">Type :</span>
-        <div id="type-filter-pills"></div>
-      </div>
-      <div class="graph-layout">
-        <div class="graph-panel"><canvas id="c" width="560" height="440"></canvas></div>
-        <div class="focus-panel" id="focus-panel">
-          <div style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:2rem 0">Cliquez sur un nœud pour voir ses connexions</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--color-text-secondary)">
-        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#E24B4A;margin-right:4px"></span>Orpheline (0 body)</span>
-        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#EF9F27;margin-right:4px"></span>Faible (1-2 body)</span>
-        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#378ADD;margin-right:4px"></span>Normale (3-4 body)</span>
-        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#1D9E75;margin-right:4px"></span>Hub (5+ body)</span>
-        <span style="color:var(--color-text-tertiary)">· Point coloré = type de page · Molette = zoom · Drag = déplacer</span>
-      </div>
-    </div>
-
-    <div id="tab-table" style="display:none">
-      <div class="toggle-row">
-        <label class="toggle-switch"><input type="checkbox" id="toggle-pagination-tbl" checked onchange="syncToggles();renderTable()"><span class="toggle-slider"></span></label>
+        <label class="toggle-switch"><input type="checkbox" id="toggle-pagination" checked onchange="syncToggles();renderTable()"><span class="toggle-slider"></span></label>
         <span style="font-weight:500">Exclure les URLs de pagination</span>
-        <span style="color:var(--color-text-secondary);font-size:12px" id="pagination-count-tbl"></span>
+        <span style="color:var(--color-text-secondary);font-size:12px;margin-left:6px" id="pagination-count"></span>
       </div>
       <div class="filter-bar">
         <select id="tbl-maillage" onchange="renderTable()">
@@ -163,31 +106,34 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--color-backgrou
         <select id="tbl-pagetype" onchange="renderTable()"><option value="all">Tous les types</option></select>
         <input type="text" id="tbl-search" placeholder="Rechercher une URL..." oninput="renderTable()">
       </div>
-      <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Cliquez sur une ligne pour voir le détail des liens.</p>
-      <div class="tbl-wrap">
-        <table class="sort-table">
-          <thead>
-            <tr>
-              <th class="group-header th-url" rowspan="2" style="vertical-align:bottom;text-align:left;top:0;z-index:3">URL</th>
-              <th class="group-header col-sep" colspan="3" style="color:#085041;background:#f0faf6">↑ Liens entrants</th>
-              <th class="group-header col-sep" colspan="2" style="color:#444441;background:#f5f4f0">↓ Liens sortants</th>
-              <th class="group-header col-sep" rowspan="2" style="vertical-align:bottom">Type</th>
-              <th class="group-header col-sep" rowspan="2" style="vertical-align:bottom">Maillage</th>
-            </tr>
-            <tr>
-              <th class="sub-header col-sep" onclick="sortTable('in_body')" id="th-in_body" style="color:#085041;background:#f0faf6">Body <span id="arrow-in_body"></span></th>
-              <th class="sub-header" onclick="sortTable('in_nav')" id="th-in_nav" style="color:#3C3489;background:#f5f4fe">Nav <span id="arrow-in_nav"></span></th>
-              <th class="sub-header" onclick="sortTable('in_footer')" id="th-in_footer" style="color:#444441;background:#f5f4f0">Footer <span id="arrow-in_footer"></span></th>
-              <th class="sub-header col-sep" onclick="sortTable('out_body')" id="th-out_body" style="color:#444441">Body <span id="arrow-out_body"></span></th>
-              <th class="sub-header" onclick="sortTable('out_total')" id="th-out_total" style="color:#444441">Total <span id="arrow-out_total"></span></th>
-            </tr>
-          </thead>
-          <tbody id="tbl-body"></tbody>
-        </table>
+      <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Cliquez sur une ligne pour voir le détail des liens entrants et sortants.</p>
+      <div class="tbl-outer">
+        <div class="tbl-scroll">
+          <table class="sort-table">
+            <thead>
+              <tr>
+                <th class="group-header th-url" rowspan="2" style="vertical-align:bottom;text-align:left;top:0;z-index:3;position:sticky;left:0;background:var(--color-background-secondary);min-width:260px">URL</th>
+                <th class="group-header col-sep" colspan="3" style="color:#085041;background:#f0faf6">↑ Liens entrants</th>
+                <th class="group-header col-sep" colspan="2" style="background:#f5f4f0;color:#444441">↓ Liens sortants</th>
+                <th class="group-header col-sep" rowspan="2" style="vertical-align:bottom">Type</th>
+                <th class="group-header col-sep" rowspan="2" style="vertical-align:bottom">Maillage</th>
+              </tr>
+              <tr>
+                <th class="sub-header col-sep" onclick="sortTable('in_body')" id="th-in_body" style="color:#085041;background:#f0faf6">Body <span id="arrow-in_body"></span></th>
+                <th class="sub-header" onclick="sortTable('in_nav')" id="th-in_nav" style="color:#3C3489;background:#f5f4fe">Nav <span id="arrow-in_nav"></span></th>
+                <th class="sub-header" onclick="sortTable('in_footer')" id="th-in_footer" style="color:#444441;background:#f5f4f0">Footer <span id="arrow-in_footer"></span></th>
+                <th class="sub-header col-sep" onclick="sortTable('out_body')" id="th-out_body">Body <span id="arrow-out_body"></span></th>
+                <th class="sub-header" onclick="sortTable('out_total')" id="th-out_total">Total <span id="arrow-out_total"></span></th>
+              </tr>
+            </thead>
+            <tbody id="tbl-body"></tbody>
+          </table>
+        </div>
       </div>
       <div id="tbl-count"></div>
     </div>
 
+    <!-- STATS -->
     <div id="tab-stats" style="display:none">
       <div class="toggle-row">
         <label class="toggle-switch"><input type="checkbox" id="toggle-pagination-stats" checked onchange="syncToggles();renderStatsTab()"><span class="toggle-slider"></span></label>
@@ -196,14 +142,16 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--color-backgrou
       <div id="stats-content"></div>
     </div>
 
+    <!-- IMPORT -->
     <div id="tab-import" style="display:none">
       <div class="info-box">
         CSV 4 colonnes : <code>source,destination,type_source,position</code><br>
-        Position accepte : <strong>body</strong>, <strong>header_nav</strong>, <strong>footer</strong>. CSV 2 ou 3 colonnes aussi accepté.
+        Position accepte : <strong>body</strong>, <strong>header_nav</strong>, <strong>footer</strong>. CSV 2 ou 3 colonnes aussi accepté (position = body par défaut).
       </div>
       <div style="margin-bottom:10px">
         <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Paramètres de pagination à exclure :</div>
         <input type="text" class="params-input" id="pagination-params" value="?page=,?q=,?tri=,?filtre=">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px">Séparés par des virgules.</div>
       </div>
       <textarea id="import-area" placeholder="source,destination,type_source,position&#10;/,/1011-cartons,HP,body&#10;/1011-cartons,/boite.html,Categorie,body&#10;/1011-cartons,/boite.html,Categorie,header_nav"></textarea>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
@@ -213,6 +161,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--color-backgrou
       </div>
       <p id="import-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
     </div>
+
   </div>
 </div>
 
@@ -227,56 +176,226 @@ const EXAMPLE=[
   {from:"/blog",to:"/blog/article-emballage",type:"Blog",pos:"body"},{from:"/blog",to:"/blog/article-carton",type:"Blog",pos:"body"},
   {from:"/blog/article-emballage",to:"/1011-cartons",type:"Blog",pos:"body"},{from:"/blog/article-carton",to:"/boite-carton.html",type:"Blog",pos:"body"},
   {from:"/contact",to:"/",type:"Autre",pos:"body"},
-  {from:"/",to:"/1011-cartons",type:"HP",pos:"nav"},{from:"/",to:"/1012-enveloppes",type:"HP",pos:"nav"},
-  {from:"/boite-carton.html",to:"/1011-cartons",type:"Produit",pos:"nav"},
+  {from:"/",to:"/1011-cartons",type:"HP",pos:"nav"},{from:"/boite-carton.html",to:"/1011-cartons",type:"Produit",pos:"nav"},
   {from:"/",to:"/contact",type:"HP",pos:"footer"},{from:"/1011-cartons",to:"/contact",type:"Categorie",pos:"footer"},
 ];
+
 const PTC={HP:{bg:'#EEEDFE',stroke:'#534AB7',text:'#3C3489',dot:'#7F77DD'},Categorie:{bg:'#E1F5EE',stroke:'#0F6E56',text:'#085041',dot:'#1D9E75'},Produit:{bg:'#FAECE7',stroke:'#993C1D',text:'#712B13',dot:'#D85A30'},Blog:{bg:'#FAEEDA',stroke:'#854F0B',text:'#633806',dot:'#EF9F27'},CMS:{bg:'#FBEAF0',stroke:'#993556',text:'#72243E',dot:'#D4537E'},Autre:{bg:'#F1EFE8',stroke:'#5F5E5A',text:'#444441',dot:'#888780'}};
 const MC={orphan:{fill:'#FCEBEB',stroke:'#E24B4A',text:'#A32D2D'},weak:{fill:'#FAEEDA',stroke:'#EF9F27',text:'#633806'},normal:{fill:'#E6F1FB',stroke:'#378ADD',text:'#185FA5'},hub:{fill:'#E1F5EE',stroke:'#1D9E75',text:'#0F6E56'}};
-let allLinks=[...EXAMPLE],links=[],nodes={},positions={},selected=null;
-let activeMF=new Set(),activeTypePill=null,sortCol='in_body',sortDir='asc';
-let transform={x:0,y:0,scale:1};
-let drag={active:false,node:null,sx:0,sy:0,ox:0,oy:0,px:0,py:0};
-let expandedRow=null;
+
+let allLinks=[...EXAMPLE],links=[],nodes={};
+let sortCol='in_body',sortDir='asc',expandedRow=null;
+
 function getPaginationParams(){return(document.getElementById('pagination-params').value||'?').split(',').map(s=>s.trim()).filter(Boolean);}
 function isPagination(url){return getPaginationParams().some(p=>url.includes(p));}
 function shouldExclude(){return document.getElementById('toggle-pagination').checked;}
-function syncToggles(){const v=document.getElementById('toggle-pagination').checked||document.getElementById('toggle-pagination-tbl').checked||document.getElementById('toggle-pagination-stats').checked;['toggle-pagination','toggle-pagination-tbl','toggle-pagination-stats'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=v;});}
-function filterLinks(){const excl=shouldExclude();links=excl?allLinks.filter(l=>!isPagination(l.from)&&!isPagination(l.to)):[...allLinks];const pc=allLinks.length-links.length;['pagination-count','pagination-count-tbl'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=pc>0?`— ${pc} liens de pagination exclus`:'';});}
+
+function syncToggles(){
+  const v=document.getElementById('toggle-pagination').checked||document.getElementById('toggle-pagination-stats').checked;
+  ['toggle-pagination','toggle-pagination-stats'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=v;});
+}
+
+function filterLinks(){
+  const excl=shouldExclude();
+  links=excl?allLinks.filter(l=>!isPagination(l.from)&&!isPagination(l.to)):[...allLinks];
+  const pc=allLinks.length-links.length;
+  const el=document.getElementById('pagination-count');
+  if(el)el.textContent=pc>0?`— ${pc} liens de pagination exclus`:'';
+}
+
 function initNode(id){if(!nodes[id])nodes[id]={id,pageType:'Autre',in_body:[],in_nav:[],in_footer:[],out_body:[],out_nav:[],out_footer:[]};}
-function buildGraph(){filterLinks();nodes={};links.forEach(l=>{if(!l.from||!l.to)return;initNode(l.from);initNode(l.to);if(l.type&&l.type!=='')nodes[l.from].pageType=l.type;const pos=(l.pos||'body').trim().toLowerCase();const vp=['body','nav','footer'].includes(pos)?pos:'body';if(!nodes[l.from]['out_'+vp].includes(l.to))nodes[l.from]['out_'+vp].push(l.to);if(!nodes[l.to]['in_'+vp].includes(l.from))nodes[l.to]['in_'+vp].push(l.from);});Object.values(nodes).forEach(n=>{['in_body','in_nav','in_footer','out_body','out_nav','out_footer'].forEach(k=>{if(!Array.isArray(n[k]))n[k]=[];});});}
+
+function buildGraph(){
+  filterLinks();nodes={};
+  links.forEach(l=>{
+    if(!l.from||!l.to)return;
+    initNode(l.from);initNode(l.to);
+    if(l.type&&l.type!=='')nodes[l.from].pageType=l.type;
+    const pos=(l.pos||'body').trim().toLowerCase();
+    const vp=['body','nav','footer'].includes(pos)?pos:'body';
+    if(!nodes[l.from]['out_'+vp].includes(l.to))nodes[l.from]['out_'+vp].push(l.to);
+    if(!nodes[l.to]['in_'+vp].includes(l.from))nodes[l.to]['in_'+vp].push(l.from);
+  });
+  Object.values(nodes).forEach(n=>{['in_body','in_nav','in_footer','out_body','out_nav','out_footer'].forEach(k=>{if(!Array.isArray(n[k]))n[k]=[];});});
+}
+
 function getMT(n){if(!n)return'orphan';const i=(n.in_body||[]).length;if(i===0)return'orphan';if(i<=2)return'weak';if(i>=5)return'hub';return'normal';}
 function getMBadge(t){if(t==='orphan')return'<span class="badge b-red">orpheline</span>';if(t==='weak')return'<span class="badge b-amber">faible</span>';if(t==='hub')return'<span class="badge b-green">hub</span>';return'<span class="badge b-blue">normale</span>';}
 function getPTBadge(pt){const c=PTC[pt]||PTC.Autre;return`<span class="badge" style="background:${c.bg};color:${c.text}">${pt||'Autre'}</span>`;}
 function getAllTypes(){return[...new Set(Object.values(nodes).map(n=>n.pageType||'Autre'))].sort();}
 function outTotal(n){return(n.out_body||[]).length+(n.out_nav||[]).length+(n.out_footer||[]).length;}
-function toggleMF(t){if(activeMF.has(t))activeMF.delete(t);else activeMF.add(t);document.querySelectorAll('.mpill').forEach(el=>el.classList.toggle('active',activeMF.has(el.dataset.m)));renderGraph();}
-function toggleTPill(t){activeTypePill=activeTypePill===t?null:t;renderTypePills();renderGraph();}
-function renderTypePills(){const el=document.getElementById('type-filter-pills');if(!el)return;el.innerHTML=getAllTypes().map(t=>{const c=PTC[t]||PTC.Autre;const count=Object.values(nodes).filter(n=>(n.pageType||'Autre')===t).length;const isActive=activeTypePill===t;return`<div class="tpill" style="background:${c.bg};color:${c.text};border-color:${isActive?c.stroke:'transparent'}" onclick="toggleTPill('${t}')">${t} <span style="opacity:.65">${count}</span></div>`;}).join('');}
-function autoLayout(){buildGraph();const keys=Object.keys(nodes),W=560,H=440,cx=W/2,cy=H/2;const sorted=keys.slice().sort((a,b)=>(nodes[b].in_body||[]).length-(nodes[a].in_body||[]).length);positions={};const place=(arr,cx,cy,rx,ry)=>arr.forEach((k,i)=>{const a=(2*Math.PI*i/arr.length)-Math.PI/2;positions[k]={x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a)};});const hubs=sorted.filter(k=>(nodes[k].in_body||[]).length>=5);const normal=sorted.filter(k=>(nodes[k].in_body||[]).length>=3&&(nodes[k].in_body||[]).length<5);const weak=sorted.filter(k=>(nodes[k].in_body||[]).length>=1&&(nodes[k].in_body||[]).length<3);const orphans=sorted.filter(k=>(nodes[k].in_body||[]).length===0);if(hubs.length)place(hubs,cx,cy,65,52);place(normal,cx,cy,155,118);place(weak,cx,cy,230,170);orphans.forEach((k,i)=>{positions[k]={x:30+i*Math.min(80,(W-50)/Math.max(orphans.length,1)),y:H-26};});keys.forEach(k=>{if(!positions[k])positions[k]={x:cx+Math.random()*180-90,y:cy+Math.random()*140-70};});transform={x:0,y:0,scale:1};renderGraph();}
-function resetZoom(){transform={x:0,y:0,scale:1};renderGraph();}
-const canvas=document.getElementById('c');
-const ctx=canvas.getContext('2d');
-function toWorld(x,y){return{x:(x-transform.x)/transform.scale,y:(y-transform.y)/transform.scale};}
-function renderGraph(){buildGraph();renderTypePills();const search=(document.getElementById('g-search').value||'').toLowerCase();ctx.clearRect(0,0,560,440);ctx.save();ctx.translate(transform.x,transform.y);ctx.scale(transform.scale,transform.scale);links.filter(l=>!l.pos||l.pos==='body').forEach(l=>{const f=positions[l.from],t=positions[l.to];if(!f||!t)return;const fn=nodes[l.from],tn=nodes[l.to];if(!fn||!tn)return;const fMV=activeMF.size===0||activeMF.has(getMT(fn));const tMV=activeMF.size===0||activeMF.has(getMT(tn));const fTV=!activeTypePill||((fn.pageType||'Autre')===activeTypePill||(tn.pageType||'Autre')===activeTypePill);const isHL=selected&&(l.from===selected||l.to===selected);const show=fMV&&tMV&&fTV;const dx=t.x-f.x,dy=t.y-f.y,len=Math.sqrt(dx*dx+dy*dy);if(len<1)return;const r=16,ex=f.x+dx*(len-r)/len,ey=f.y+dy*(len-r)/len;ctx.save();ctx.globalAlpha=show?1:0.06;ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.lineTo(ex,ey);ctx.strokeStyle=isHL?'rgba(239,159,39,0.9)':'rgba(128,128,128,0.15)';ctx.lineWidth=isHL?2:1;ctx.stroke();const ax=ex-dx/len*9,ay=ey-dy/len*9,nx=-dy/len,ny=dx/len;ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ax+nx*3.5,ay+ny*3.5);ctx.lineTo(ax-nx*3.5,ay-ny*3.5);ctx.closePath();ctx.fillStyle=isHL?'rgba(239,159,39,0.9)':'rgba(128,128,128,0.15)';ctx.fill();ctx.restore();});Object.values(nodes).forEach(n=>{const p=positions[n.id];if(!p)return;const mt=getMT(n);const mV=activeMF.size===0||activeMF.has(mt);const tV=!activeTypePill||(n.pageType||'Autre')===activeTypePill;const inS=!search||n.id.toLowerCase().includes(search);const dimmed=!mV||!tV||!inS;const mc=MC[mt];const ptc=PTC[n.pageType||'Autre']||PTC.Autre;const isSel=selected===n.id;const label=n.id.split('/').filter(Boolean).pop()||'accueil';ctx.save();if(dimmed)ctx.globalAlpha=0.1;ctx.beginPath();ctx.arc(p.x,p.y,16,0,2*Math.PI);ctx.fillStyle=isSel?'#FAEEDA':mc.fill;ctx.fill();ctx.strokeStyle=isSel?'#EF9F27':mc.stroke;ctx.lineWidth=isSel?2.5:1.5;ctx.stroke();ctx.beginPath();ctx.arc(p.x+11,p.y-11,5,0,2*Math.PI);ctx.fillStyle=ptc.dot;ctx.fill();ctx.fillStyle=isSel?'#633806':mc.text;ctx.font='500 10px -apple-system,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label.length>8?label.slice(0,7)+'…':label,p.x,p.y);ctx.restore();});ctx.restore();}
-function updateFocusPanel(n){if(!n)return;const mt=getMT(n);const label=n.id.split('/').filter(Boolean).pop()||'accueil';const mkLinks=(arr)=>(arr||[]).length?(arr).map(id=>`<div class="fp-link" onclick="selectNode('${id.replace(/'/g,"\\'")}');" title="${id}">${id}</div>`).join(''):`<div class="fp-empty">aucun</div>`;document.getElementById('focus-panel').innerHTML=`<div class="fp-title">${label}</div><div class="fp-url">${n.id}</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">${getPTBadge(n.pageType||'Autre')}${getMBadge(mt)}</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:8px"><div style="background:#E1F5EE;border-radius:var(--border-radius-md);padding:6px;text-align:center"><div style="font-size:10px;color:#085041;margin-bottom:1px">body ↑</div><div style="font-size:17px;font-weight:500;color:${MC[mt].text}">${(n.in_body||[]).length}</div></div><div style="background:#EEEDFE;border-radius:var(--border-radius-md);padding:6px;text-align:center"><div style="font-size:10px;color:#3C3489;margin-bottom:1px">nav ↑</div><div style="font-size:17px;font-weight:500;color:#3C3489">${(n.in_nav||[]).length}</div></div><div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:6px;text-align:center"><div style="font-size:10px;color:#444441;margin-bottom:1px">footer ↑</div><div style="font-size:17px;font-weight:500;color:#444441">${(n.in_footer||[]).length}</div></div></div><div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px;text-align:center;margin-bottom:8px"><div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:1px">sortants body</div><div style="font-size:17px;font-weight:500">${(n.out_body||[]).length}</div></div><div class="fp-section"><div class="fp-section-title" style="color:#085041">↑ Body (${(n.in_body||[]).length})</div><div style="max-height:70px;overflow-y:auto;margin-bottom:6px">${mkLinks(n.in_body)}</div><div class="fp-section-title" style="color:#3C3489">↑ Header/Nav (${(n.in_nav||[]).length})</div><div style="max-height:55px;overflow-y:auto;margin-bottom:6px">${mkLinks(n.in_nav)}</div><div class="fp-section-title" style="color:#444441">↑ Footer (${(n.in_footer||[]).length})</div><div style="max-height:55px;overflow-y:auto;margin-bottom:6px">${mkLinks(n.in_footer)}</div><div class="fp-section-title" style="color:var(--color-text-secondary)">↓ Sortants body (${(n.out_body||[]).length})</div><div style="max-height:70px;overflow-y:auto">${mkLinks(n.out_body)}</div></div>`;}
-function selectNode(id){selected=id;if(nodes[id])updateFocusPanel(nodes[id]);renderGraph();}
-canvas.addEventListener('mousedown',e=>{const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;const w=toWorld(mx,my);let hit=null;Object.values(nodes).forEach(n=>{const p=positions[n.id];if(!p)return;if(Math.sqrt((w.x-p.x)**2+(w.y-p.y)**2)<18)hit=n.id;});drag={active:true,node:hit,sx:mx,sy:my,ox:hit?positions[hit].x:transform.x,oy:hit?positions[hit].y:transform.y,px:0,py:0};canvas.classList.add('dragging');});
-canvas.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;if(drag.active){const dx=mx-drag.sx,dy=my-drag.sy;drag.px=dx;drag.py=dy;if(drag.node){positions[drag.node]={x:drag.ox+dx/transform.scale,y:drag.oy+dy/transform.scale};}else{transform.x=drag.ox+dx;transform.y=drag.oy+dy;}renderGraph();}});
-canvas.addEventListener('mouseup',()=>{if(Math.abs(drag.px)<5&&Math.abs(drag.py)<5&&drag.node)selectNode(drag.node);drag={active:false,node:null};canvas.classList.remove('dragging');});
-canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;const d=e.deltaY>0?0.85:1.18;transform={x:mx-(mx-transform.x)*d,y:my-(my-transform.y)*d,scale:Math.min(5,Math.max(0.15,transform.scale*d))};renderGraph();},{passive:false});
-function toggleRowDetail(rowId,nodeId){const detailRow=document.getElementById('detail-'+rowId);const dataRow=document.getElementById('row-'+rowId);const chevron=document.getElementById('chev-'+rowId);if(!detailRow)return;const isOpen=detailRow.classList.contains('open');if(expandedRow&&expandedRow!==rowId){const prev=document.getElementById('detail-'+expandedRow);const prevRow=document.getElementById('row-'+expandedRow);const prevChev=document.getElementById('chev-'+expandedRow);if(prev)prev.classList.remove('open');if(prevRow)prevRow.classList.remove('expanded');if(prevChev)prevChev.classList.remove('open');}if(isOpen){detailRow.classList.remove('open');dataRow.classList.remove('expanded');chevron.classList.remove('open');expandedRow=null;}else{detailRow.classList.add('open');dataRow.classList.add('expanded');chevron.classList.add('open');expandedRow=rowId;const n=nodes[nodeId];if(n){const mkLinks=(arr)=>(arr||[]).length?(arr).map(id=>`<div class="detail-link" onclick="jumpToGraph('${id.replace(/'/g,"\\'")}');" title="${id}">${id}</div>`).join(''):`<div class="detail-empty">Aucun</div>`;document.getElementById('di-body-'+rowId).innerHTML=mkLinks(n.in_body);document.getElementById('di-nav-'+rowId).innerHTML=mkLinks(n.in_nav);document.getElementById('di-footer-'+rowId).innerHTML=mkLinks(n.in_footer);document.getElementById('di-out-'+rowId).innerHTML=mkLinks(n.out_body);}}}
-function jumpToGraph(id){selected=id;switchTab('graph');if(nodes[id])updateFocusPanel(nodes[id]);renderGraph();}
+
 function sortTable(col){if(sortCol===col)sortDir=sortDir==='asc'?'desc':'asc';else{sortCol=col;sortDir='asc';}expandedRow=null;renderTable();}
-function renderTable(){buildGraph();const sel=document.getElementById('tbl-pagetype');const types=getAllTypes();const cur=sel.value;sel.innerHTML='<option value="all">Tous les types</option>'+types.map(t=>`<option value="${t}" ${cur===t?'selected':''}>${t}</option>`).join('');const mf=document.getElementById('tbl-maillage').value,ptf=sel.value,search=(document.getElementById('tbl-search').value||'').toLowerCase();let rows=Object.values(nodes);if(mf!=='all')rows=rows.filter(n=>getMT(n)===mf);if(ptf!=='all')rows=rows.filter(n=>(n.pageType||'Autre')===ptf);if(search)rows=rows.filter(n=>n.id.toLowerCase().includes(search));rows.sort((a,b)=>{let va,vb;if(sortCol==='id'){va=a.id;vb=b.id;}else if(sortCol==='out_total'){va=outTotal(a);vb=outTotal(b);}else{va=(a[sortCol]||[]).length;vb=(b[sortCol]||[]).length;}if(va<vb)return sortDir==='asc'?-1:1;if(va>vb)return sortDir==='asc'?1:-1;return 0;});['id','in_body','in_nav','in_footer','out_body','out_total'].forEach(c=>{const el=document.getElementById('arrow-'+c),th=document.getElementById('th-'+c);if(el)el.textContent=sortCol===c?(sortDir==='asc'?' ↑':' ↓'):'';if(th)th.classList.toggle('sorted',sortCol===c);});document.getElementById('tbl-body').innerHTML=rows.map((n,i)=>{const mt=getMT(n);const rowId='r'+i;const safeId=n.id.replace(/'/g,"\\'");const inB=(n.in_body||[]).length,inN=(n.in_nav||[]).length,inF=(n.in_footer||[]).length,outB=(n.out_body||[]).length,outT=outTotal(n);return`<tr class="data-row" id="row-${rowId}" onclick="toggleRowDetail('${rowId}','${safeId}')"><td class="td-url" title="${n.id}" style="font-size:12px"><span class="chevron" id="chev-${rowId}">▶</span>${n.id}</td><td class="col-sep" style="font-weight:500;color:${MC[mt].text}">${inB}</td><td style="color:#3C3489">${inN}</td><td style="color:var(--color-text-secondary)">${inF}</td><td class="col-sep" style="color:var(--color-text-secondary)">${outB}</td><td style="color:var(--color-text-secondary)">${outT}</td><td class="col-sep">${getPTBadge(n.pageType||'Autre')}</td><td class="col-sep">${getMBadge(mt)}</td></tr><tr class="detail-row" id="detail-${rowId}"><td colspan="8"><div class="detail-inner"><div><div class="detail-col-title" style="color:#085041">↑ Body (${inB})</div><div class="detail-scroll" id="di-body-${rowId}"></div></div><div><div class="detail-col-title" style="color:#3C3489">↑ Nav (${inN})</div><div class="detail-scroll" id="di-nav-${rowId}"></div></div><div><div class="detail-col-title" style="color:#444441">↑ Footer (${inF})</div><div class="detail-scroll" id="di-footer-${rowId}"></div></div><div><div class="detail-col-title" style="color:var(--color-text-secondary)">↓ Sortants body (${outB})</div><div class="detail-scroll" id="di-out-${rowId}"></div></div></div></td></tr>`;}).join('');document.getElementById('tbl-count').textContent=`${rows.length} page(s) sur ${Object.keys(nodes).length}`;}
-function renderStatsTab(){buildGraph();const all=Object.values(nodes),types=getAllTypes();const maxPages=Math.max(...types.map(t=>all.filter(n=>(n.pageType||'Autre')===t).length),1);const totalBody=links.filter(l=>!l.pos||l.pos==='body').length;const totalNav=links.filter(l=>l.pos==='nav').length;const totalFooter=links.filter(l=>l.pos==='footer').length;const mg=[{key:'orphan',label:'Orphelines',color:'#A32D2D',bg:'#FCEBEB',desc:'0 lien body'},{key:'weak',label:'Faibles',color:'#854F0B',bg:'#FAEEDA',desc:'1-2 body'},{key:'normal',label:'Normales',color:'#185FA5',bg:'#E6F1FB',desc:'3-4 body'},{key:'hub',label:'Hubs',color:'#0F6E56',bg:'#E1F5EE',desc:'5+ body'}];const globalCards=mg.map(g=>{const count=all.filter(n=>getMT(n)===g.key).length;return`<div class="stat-card" style="cursor:default"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">${g.label} <span style="opacity:.7">${g.desc}</span></div><div style="font-size:20px;font-weight:500;color:${g.color}">${count}</div></div>`;}).join('');const avgBody=all.length?(Math.round(all.reduce((s,n)=>s+(n.in_body||[]).length,0)/all.length*10)/10):0;const orphRate=all.length?Math.round(all.filter(n=>getMT(n)==='orphan').length/all.length*100):0;const typeRows=types.map(t=>{const pages=all.filter(n=>(n.pageType||'Autre')===t);const total=pages.length;const orphans=pages.filter(n=>getMT(n)==='orphan').length;const avgB=total?(Math.round(pages.reduce((s,n)=>s+(n.in_body||[]).length,0)/total*10)/10):0;const avgN=total?(Math.round(pages.reduce((s,n)=>s+(n.in_nav||[]).length,0)/total*10)/10):0;const c=PTC[t]||PTC.Autre;const pct=Math.round(total/maxPages*100);return`<div class="type-stat-row"><div style="width:10px;height:10px;border-radius:50%;background:${c.dot};flex-shrink:0"></div><div style="font-size:13px;font-weight:500;min-width:80px">${t}</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${pct}%;background:${c.dot}"></div></div><div class="type-nums">${total} pages · <span style="color:#A32D2D">${orphans} orph.</span> · body moy. ${avgB} · nav moy. ${avgN}</div></div>`;}).join('');const detailBlocks=mg.map(g=>{const pages=all.filter(n=>getMT(n)===g.key).sort((a,b)=>(a.in_body||[]).length-(b.in_body||[]).length);const byType={};pages.forEach(n=>{const t=n.pageType||'Autre';if(!byType[t])byType[t]=[];byType[t].push(n);});const inner=Object.keys(byType).sort().map(t=>{const c=PTC[t]||PTC.Autre;const urls=byType[t].map(n=>`<div class="url-row" style="border-left-color:${c.dot}" title="${n.id}">${n.id} <span style="float:right;opacity:.6;font-size:11px">body:${(n.in_body||[]).length} nav:${(n.in_nav||[]).length} footer:${(n.in_footer||[]).length} ↓${(n.out_body||[]).length}</span></div>`).join('');return`<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:500;color:${c.text};background:${c.bg};display:inline-block;padding:2px 8px;border-radius:4px;margin-bottom:4px">${t} — ${byType[t].length}</div>${urls}</div>`;}).join('');return`<div class="section-block"><div class="section-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'"><span style="color:${g.color}">${g.label} <span style="font-weight:400;font-size:12px">${g.desc}</span></span><span style="font-size:13px;font-weight:500;color:${g.color}">${pages.length} page(s)</span></div><div class="section-body">${pages.length===0?'<div style="font-size:13px;color:var(--color-text-secondary)">Aucune page.</div>':inner}</div></div>`;}).join('');document.getElementById('stats-content').innerHTML=`<div class="section-block"><div class="section-head" style="cursor:default">Vue globale</div><div class="section-body"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px"><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Pages</div><div style="font-size:20px;font-weight:500">${all.length}</div></div><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:#085041;margin-bottom:3px">Liens body</div><div style="font-size:20px;font-weight:500;color:#085041">${totalBody}</div></div><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:#3C3489;margin-bottom:3px">Liens nav</div><div style="font-size:20px;font-weight:500;color:#3C3489">${totalNav}</div></div><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:#444441;margin-bottom:3px">Liens footer</div><div style="font-size:20px;font-weight:500;color:#444441">${totalFooter}</div></div><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Body moy./page</div><div style="font-size:20px;font-weight:500">${avgBody}</div></div><div class="stat-card" style="cursor:default"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Taux orphelines</div><div style="font-size:20px;font-weight:500;color:#A32D2D">${orphRate}%</div></div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">${globalCards}</div></div></div><div class="section-block"><div class="section-head" style="cursor:default">Répartition par type de page</div><div class="section-body">${typeRows}</div></div>${detailBlocks}`;}
-function rebuildAndRender(){syncToggles();buildGraph();const t=document.querySelector('button.tab.active')?.textContent?.trim();if(t==='Graphe')autoLayout();else if(t==='Tableau')renderTable();else if(t==='Statistiques')renderStatsTab();}
+
+function renderTable(){
+  buildGraph();
+  const sel=document.getElementById('tbl-pagetype');
+  const types=getAllTypes();const cur=sel.value;
+  sel.innerHTML='<option value="all">Tous les types</option>'+types.map(t=>`<option value="${t}"${cur===t?' selected':''}>${t}</option>`).join('');
+  const mf=document.getElementById('tbl-maillage').value;
+  const ptf=sel.value;
+  const search=(document.getElementById('tbl-search').value||'').toLowerCase();
+  let rows=Object.values(nodes);
+  if(mf!=='all')rows=rows.filter(n=>getMT(n)===mf);
+  if(ptf!=='all')rows=rows.filter(n=>(n.pageType||'Autre')===ptf);
+  if(search)rows=rows.filter(n=>n.id.toLowerCase().includes(search));
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortCol==='id'){va=a.id;vb=b.id;}
+    else if(sortCol==='out_total'){va=outTotal(a);vb=outTotal(b);}
+    else{va=(a[sortCol]||[]).length;vb=(b[sortCol]||[]).length;}
+    if(va<vb)return sortDir==='asc'?-1:1;if(va>vb)return sortDir==='asc'?1:-1;return 0;
+  });
+  ['id','in_body','in_nav','in_footer','out_body','out_total'].forEach(c=>{
+    const el=document.getElementById('arrow-'+c),th=document.getElementById('th-'+c);
+    if(el)el.textContent=sortCol===c?(sortDir==='asc'?' ↑':' ↓'):'';
+    if(th)th.classList.toggle('sorted',sortCol===c);
+  });
+  document.getElementById('tbl-body').innerHTML=rows.map((n,i)=>{
+    const mt=getMT(n);const rowId='r'+i;const safeId=n.id.replace(/'/g,"\\'");
+    const inB=(n.in_body||[]).length,inN=(n.in_nav||[]).length,inF=(n.in_footer||[]).length,outB=(n.out_body||[]).length,outT=outTotal(n);
+    return`<tr class="data-row${expandedRow===rowId?' expanded':''}" id="row-${rowId}" onclick="toggleRowDetail('${rowId}','${safeId}')">
+      <td class="td-url" style="font-size:12px;position:sticky;left:0;background:var(--color-background-primary);z-index:1" title="${n.id}"><span class="chevron${expandedRow===rowId?' open':''}" id="chev-${rowId}">▶</span>${n.id}</td>
+      <td class="col-sep" style="font-weight:500;color:${MC[mt].text}">${inB}</td>
+      <td style="color:#3C3489">${inN}</td>
+      <td style="color:var(--color-text-secondary)">${inF}</td>
+      <td class="col-sep" style="color:var(--color-text-secondary)">${outB}</td>
+      <td style="color:var(--color-text-secondary)">${outT}</td>
+      <td class="col-sep">${getPTBadge(n.pageType||'Autre')}</td>
+      <td class="col-sep">${getMBadge(mt)}</td>
+    </tr>
+    <tr class="detail-row${expandedRow===rowId?' open':''}" id="detail-${rowId}">
+      <td colspan="8" style="position:static">
+        <div class="detail-inner">
+          <div><div class="detail-col-title" style="color:#085041">↑ Body (${inB})</div><div class="detail-scroll" id="di-body-${rowId}"></div></div>
+          <div><div class="detail-col-title" style="color:#3C3489">↑ Nav (${inN})</div><div class="detail-scroll" id="di-nav-${rowId}"></div></div>
+          <div><div class="detail-col-title" style="color:#444441">↑ Footer (${inF})</div><div class="detail-scroll" id="di-footer-${rowId}"></div></div>
+          <div><div class="detail-col-title" style="color:var(--color-text-secondary)">↓ Sortants body (${outB})</div><div class="detail-scroll" id="di-out-${rowId}"></div></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tbl-count').textContent=`${rows.length} page(s) sur ${Object.keys(nodes).length}`;
+  if(expandedRow){
+    const rowId=expandedRow;
+    const nodeId=rows.find((_,i)=>'r'+i===rowId)?.id;
+    if(nodeId&&nodes[nodeId])populateDetail(rowId,nodes[nodeId]);
+  }
+}
+
+function populateDetail(rowId,n){
+  const mkLinks=(arr)=>(arr||[]).length?(arr).map(id=>`<div class="detail-link" onclick="event.stopPropagation()" title="${id}">${id}</div>`).join(''):`<div class="detail-empty">Aucun</div>`;
+  const b=document.getElementById('di-body-'+rowId);const nv=document.getElementById('di-nav-'+rowId);const f=document.getElementById('di-footer-'+rowId);const o=document.getElementById('di-out-'+rowId);
+  if(b)b.innerHTML=mkLinks(n.in_body);if(nv)nv.innerHTML=mkLinks(n.in_nav);if(f)f.innerHTML=mkLinks(n.in_footer);if(o)o.innerHTML=mkLinks(n.out_body);
+}
+
+function toggleRowDetail(rowId,nodeId){
+  if(expandedRow===rowId){expandedRow=null;}
+  else{expandedRow=rowId;}
+  renderTable();
+  if(expandedRow&&nodes[nodeId])populateDetail(expandedRow,nodes[nodeId]);
+}
+
+function renderStatsTab(){
+  buildGraph();
+  const all=Object.values(nodes),types=getAllTypes();
+  const maxPages=Math.max(...types.map(t=>all.filter(n=>(n.pageType||'Autre')===t).length),1);
+  const totalBody=links.filter(l=>!l.pos||l.pos==='body').length;
+  const totalNav=links.filter(l=>l.pos==='nav').length;
+  const totalFooter=links.filter(l=>l.pos==='footer').length;
+  const mg=[
+    {key:'orphan',label:'Orphelines',color:'#A32D2D',bg:'#FCEBEB',desc:'0 lien body'},
+    {key:'weak',label:'Faibles',color:'#854F0B',bg:'#FAEEDA',desc:'1-2 body'},
+    {key:'normal',label:'Normales',color:'#185FA5',bg:'#E6F1FB',desc:'3-4 body'},
+    {key:'hub',label:'Hubs',color:'#0F6E56',bg:'#E1F5EE',desc:'5+ body'},
+  ];
+  const globalCards=mg.map(g=>{const count=all.filter(n=>getMT(n)===g.key).length;return`<div class="stat-card" style="cursor:default"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">${g.label} <span style="opacity:.7">${g.desc}</span></div><div style="font-size:20px;font-weight:500;color:${g.color}">${count}</div></div>`;}).join('');
+  const avgBody=all.length?(Math.round(all.reduce((s,n)=>s+(n.in_body||[]).length,0)/all.length*10)/10):0;
+  const orphRate=all.length?Math.round(all.filter(n=>getMT(n)==='orphan').length/all.length*100):0;
+  const typeRows=types.map(t=>{
+    const pages=all.filter(n=>(n.pageType||'Autre')===t);const total=pages.length;
+    const orphans=pages.filter(n=>getMT(n)==='orphan').length;
+    const avgB=total?(Math.round(pages.reduce((s,n)=>s+(n.in_body||[]).length,0)/total*10)/10):0;
+    const avgN=total?(Math.round(pages.reduce((s,n)=>s+(n.in_nav||[]).length,0)/total*10)/10):0;
+    const c=PTC[t]||PTC.Autre;const pct=Math.round(total/maxPages*100);
+    return`<div class="type-stat-row"><div style="width:10px;height:10px;border-radius:50%;background:${c.dot};flex-shrink:0"></div><div style="font-size:13px;font-weight:500;min-width:80px">${t}</div><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${pct}%;background:${c.dot}"></div></div><div class="type-nums">${total} pages · <span style="color:#A32D2D">${orphans} orph.</span> · body moy. ${avgB} · nav moy. ${avgN}</div></div>`;
+  }).join('');
+  const detailBlocks=mg.map(g=>{
+    const pages=all.filter(n=>getMT(n)===g.key).sort((a,b)=>(a.in_body||[]).length-(b.in_body||[]).length);
+    const byType={};pages.forEach(n=>{const t=n.pageType||'Autre';if(!byType[t])byType[t]=[];byType[t].push(n);});
+    const inner=Object.keys(byType).sort().map(t=>{
+      const c=PTC[t]||PTC.Autre;
+      const urls=byType[t].map(n=>`<div class="url-row" style="border-left-color:${c.dot}" title="${n.id}">${n.id} <span style="float:right;opacity:.6;font-size:11px">body:${(n.in_body||[]).length} nav:${(n.in_nav||[]).length} footer:${(n.in_footer||[]).length} ↓${(n.out_body||[]).length}</span></div>`).join('');
+      return`<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:500;color:${c.text};background:${c.bg};display:inline-block;padding:2px 8px;border-radius:4px;margin-bottom:4px">${t} — ${byType[t].length}</div>${urls}</div>`;
+    }).join('');
+    return`<div class="section-block"><div class="section-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'"><span style="color:${g.color}">${g.label} <span style="font-weight:400;font-size:12px">${g.desc}</span></span><span style="font-size:13px;font-weight:500;color:${g.color}">${pages.length} page(s)</span></div><div class="section-body">${pages.length===0?'<div style="font-size:13px;color:var(--color-text-secondary)">Aucune page.</div>':inner}</div></div>`;
+  }).join('');
+  document.getElementById('stats-content').innerHTML=`
+    <div class="section-block"><div class="section-head" style="cursor:default">Vue globale</div><div class="section-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px">
+        <div class="stat-card"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Pages</div><div style="font-size:20px;font-weight:500">${all.length}</div></div>
+        <div class="stat-card"><div style="font-size:11px;color:#085041;margin-bottom:3px">Liens body</div><div style="font-size:20px;font-weight:500;color:#085041">${totalBody}</div></div>
+        <div class="stat-card"><div style="font-size:11px;color:#3C3489;margin-bottom:3px">Liens nav</div><div style="font-size:20px;font-weight:500;color:#3C3489">${totalNav}</div></div>
+        <div class="stat-card"><div style="font-size:11px;color:#444441;margin-bottom:3px">Liens footer</div><div style="font-size:20px;font-weight:500;color:#444441">${totalFooter}</div></div>
+        <div class="stat-card"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Body moy./page</div><div style="font-size:20px;font-weight:500">${avgBody}</div></div>
+        <div class="stat-card"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px">Taux orphelines</div><div style="font-size:20px;font-weight:500;color:#A32D2D">${orphRate}%</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">${globalCards}</div>
+    </div></div>
+    <div class="section-block"><div class="section-head" style="cursor:default">Répartition par type de page</div><div class="section-body">${typeRows}</div></div>
+    ${detailBlocks}`;
+}
+
 function parseCSVLine(line){const result=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){result.push(cur.trim());cur='';}else{cur+=c;}}result.push(cur.trim());return result;}
-function importData(){const raw=(document.getElementById('import-area').value||'').trim();const msg=document.getElementById('import-msg');if(!raw){msg.textContent='Rien à importer.';return;}try{let parsed=[];if(raw.startsWith('[')){parsed=JSON.parse(raw);}else{const lines=raw.split('\n').filter(l=>l.trim());const hasHeader=lines[0].toLowerCase().includes('source')||lines[0].toLowerCase().includes('destination');const dataLines=hasHeader?lines.slice(1):lines;for(const line of dataLines){if(!line.trim())continue;const p=parseCSVLine(line);const from=(p[0]||'').trim(),to=(p[1]||'').trim();if(!from||!to||from===to)continue;const type=(p[2]||'').trim()||undefined;const rawPos=(p[3]||'body').trim().toLowerCase();const pos=rawPos==='header_nav'?'nav':rawPos==='footer'?'footer':'body';parsed.push({from,to,type,pos});}}allLinks=parsed;positions={};buildGraph();Object.keys(nodes).forEach(k=>{positions[k]={x:280+Math.random()*400-200,y:220+Math.random()*320-160};});const pc=allLinks.filter(l=>isPagination(l.from)||isPagination(l.to)).length;const bodyC=allLinks.filter(l=>!l.pos||l.pos==='body').length;const navC=allLinks.filter(l=>l.pos==='nav').length;const footC=allLinks.filter(l=>l.pos==='footer').length;autoLayout();msg.style.color='var(--color-text-secondary)';msg.textContent=`✓ ${allLinks.length} liens — body: ${bodyC}, nav: ${navC}, footer: ${footC}, pagination exclus: ${pc}`;switchTab('graph');}catch(err){msg.style.color='#A32D2D';msg.textContent='Erreur : '+err.message;}}
-function loadExample(){allLinks=[...EXAMPLE];positions={};buildGraph();Object.keys(nodes).forEach(k=>{positions[k]={x:280+Math.random()*400-200,y:220+Math.random()*320-160};});autoLayout();document.getElementById('import-msg').textContent='Exemple chargé.';switchTab('graph');}
-function clearAll(){allLinks=[];links=[];nodes={};positions={};selected=null;expandedRow=null;if(ctx)ctx.clearRect(0,0,560,440);}
-function switchTab(t){['graph','table','stats','import'].forEach((id,i)=>{document.getElementById('tab-'+id).style.display=id===t?'':'none';document.querySelectorAll('button.tab')[i].classList.toggle('active',id===t);});if(t==='graph')renderGraph();if(t==='table'){buildGraph();renderTable();}if(t==='stats'){buildGraph();renderStatsTab();}}
-buildGraph();Object.keys(nodes).forEach(k=>{positions[k]={x:280+Math.random()*400-200,y:220+Math.random()*320-160};});autoLayout();
+
+function importData(){
+  const raw=(document.getElementById('import-area').value||'').trim();
+  const msg=document.getElementById('import-msg');
+  if(!raw){msg.textContent='Rien à importer.';return;}
+  try{
+    let parsed=[];
+    if(raw.startsWith('[')){parsed=JSON.parse(raw);}
+    else{
+      const lines=raw.split('\n').filter(l=>l.trim());
+      const hasHeader=lines[0].toLowerCase().includes('source')||lines[0].toLowerCase().includes('destination');
+      const dataLines=hasHeader?lines.slice(1):lines;
+      for(const line of dataLines){
+        if(!line.trim())continue;
+        const p=parseCSVLine(line);
+        const from=(p[0]||'').trim(),to=(p[1]||'').trim();
+        if(!from||!to||from===to)continue;
+        const type=(p[2]||'').trim()||undefined;
+        const rawPos=(p[3]||'body').trim().toLowerCase();
+        const pos=rawPos==='header_nav'?'nav':rawPos==='footer'?'footer':'body';
+        parsed.push({from,to,type,pos});
+      }
+    }
+    allLinks=parsed;
+    const pc=allLinks.filter(l=>isPagination(l.from)||isPagination(l.to)).length;
+    const bodyC=allLinks.filter(l=>!l.pos||l.pos==='body').length;
+    const navC=allLinks.filter(l=>l.pos==='nav').length;
+    const footC=allLinks.filter(l=>l.pos==='footer').length;
+    expandedRow=null;
+    renderTable();
+    msg.style.color='var(--color-text-secondary)';
+    msg.textContent=`✓ ${allLinks.length} liens — body: ${bodyC}, nav: ${navC}, footer: ${footC}, pagination exclus: ${pc}`;
+    switchTab('table');
+  }catch(err){msg.style.color='#A32D2D';msg.textContent='Erreur : '+err.message;}
+}
+
+function loadExample(){allLinks=[...EXAMPLE];expandedRow=null;renderTable();document.getElementById('import-msg').textContent='Exemple chargé.';switchTab('table');}
+function clearAll(){allLinks=[];links=[];nodes={};expandedRow=null;document.getElementById('import-msg').textContent='Données effacées.';renderTable();}
+
+function switchTab(t){
+  ['table','stats','import'].forEach((id,i)=>{
+    document.getElementById('tab-'+id).style.display=id===t?'':'none';
+    document.querySelectorAll('button.tab')[i].classList.toggle('active',id===t);
+  });
+  if(t==='table'){buildGraph();renderTable();}
+  if(t==='stats'){buildGraph();renderStatsTab();}
+}
+
+renderTable();
 </script>
 </body>
 </html>
