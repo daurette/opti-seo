@@ -99,9 +99,9 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
     <div class="tab-bar" id="main-tab-bar">
       <button class="tab active" onclick="switchTab('table')">Tableau</button>
       <button class="tab" onclick="switchTab('stats')">Statistiques</button>
-      <button class="tab" onclick="switchTab('import')">Importer</button>
       <button class="tab" onclick="switchTab('mots-cles')">Mots-clés</button>
       <button class="tab" onclick="switchTab('m3')">Suggestions maillage</button>
+      <button class="tab" onclick="switchTab('import')">Importer</button>
     </div>
 
     <!-- TABLEAU -->
@@ -158,24 +158,59 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
       <div id="stats-content"></div>
     </div>
 
-    <!-- IMPORT -->
+    <!-- IMPORT HUB -->
     <div id="tab-import" style="display:none">
-      <div class="info-box">
-        CSV 4 colonnes : <code>source,destination,type_source,position</code><br>
-        Position accepte : <strong>body</strong>, <strong>header_nav</strong>, <strong>footer</strong>. CSV 2 ou 3 colonnes aussi accepté (position = body par défaut).
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+
+        <!-- Bloc A : Contenu du site -->
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Contenu du site</div>
+          <div class="info-box" style="margin-bottom:10px">Colonnes : <code>TYPE, nom_com, url_com, meta_titre_com, meta_description_com, contenu_com</code> (et autres champs optionnels)</div>
+          <div id="m3-drop" class="m3-drop" ondragover="m3DragOver(event)" ondragleave="m3DragLeave(event)" ondrop="m3OnDrop(event)" onclick="document.getElementById('m3-file').click()">
+            <div id="m3-drop-inner">
+              <div style="font-size:28px;color:var(--color-text-tertiary);margin-bottom:8px">⬇</div>
+              <div style="font-size:13px;font-weight:500">Glissez-déposez le CSV ou cliquez</div>
+              <div style="font-size:12px;color:var(--color-text-secondary);margin-top:5px">Utilisé par l'onglet Suggestions maillage</div>
+            </div>
+            <input type="file" id="m3-file" accept=".csv" style="display:none" onclick="event.stopPropagation()" onchange="m3OnFile(this.files[0])">
+          </div>
+          <p id="m3-import-msg" style="font-size:12px;margin-top:6px;color:var(--color-text-secondary)"></p>
+        </div>
+
+        <!-- Bloc B : Liens internes Screaming Frog -->
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Liens internes — Screaming Frog</div>
+          <div class="info-box" style="margin-bottom:10px">
+            Export SF <em>All Inlinks</em> ou CSV : <code>Source, Destination, Type, Link Position</code><br>
+            Format simple accepté : <code>source, destination, type_source, position</code>
+          </div>
+          <div id="imp-drop" class="m3-drop" ondragover="impDragOver(event)" ondragleave="impDragLeave(event)" ondrop="impOnDrop(event)" onclick="document.getElementById('imp-file').click()">
+            <div id="imp-drop-inner">
+              <div style="font-size:28px;color:var(--color-text-tertiary);margin-bottom:8px">⬇</div>
+              <div style="font-size:13px;font-weight:500">Glissez-déposez le CSV ou cliquez</div>
+              <div style="font-size:12px;color:var(--color-text-secondary);margin-top:5px">Utilisé par les onglets Tableau &amp; Statistiques</div>
+            </div>
+            <input type="file" id="imp-file" accept=".csv" style="display:none" onclick="event.stopPropagation()" onchange="impOnFile(this.files[0])">
+          </div>
+          <p id="imp-file-msg" style="font-size:12px;margin-top:6px;color:var(--color-text-secondary)"></p>
+          <details style="margin-top:10px">
+            <summary style="font-size:12px;color:var(--color-text-secondary);cursor:pointer;user-select:none">Ou coller le CSV manuellement</summary>
+            <div style="margin-top:8px">
+              <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Paramètres de pagination à exclure :</div>
+              <input type="text" class="params-input" id="pagination-params" value="?page=,?q=,?tri=,?filtre=">
+              <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px;margin-bottom:6px">Séparés par des virgules.</div>
+              <textarea id="import-area" placeholder="source,destination,type_source,position&#10;/,/1011-cartons,HP,body"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+                <button onclick="importData()">Importer</button>
+                <button onclick="loadExample()">Charger exemple</button>
+                <button onclick="clearAll()">Tout effacer</button>
+              </div>
+              <p id="import-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
+            </div>
+          </details>
+        </div>
+
       </div>
-      <div style="margin-bottom:10px">
-        <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Paramètres de pagination à exclure :</div>
-        <input type="text" class="params-input" id="pagination-params" value="?page=,?q=,?tri=,?filtre=">
-        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px">Séparés par des virgules.</div>
-      </div>
-      <textarea id="import-area" placeholder="source,destination,type_source,position&#10;/,/1011-cartons,HP,body&#10;/1011-cartons,/boite.html,Categorie,body&#10;/1011-cartons,/boite.html,Categorie,header_nav"></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-        <button onclick="importData()">Importer</button>
-        <button onclick="loadExample()">Charger exemple</button>
-        <button onclick="clearAll()">Tout effacer</button>
-      </div>
-      <p id="import-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
     </div>
 
     <!-- MODULE 2 — MOTS-CLÉS -->
@@ -228,16 +263,10 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
 
     <!-- MODULE 3 — SUGGESTIONS MAILLAGE -->
     <div id="tab-m3" style="display:none">
-      <div id="m3-drop" class="m3-drop" ondragover="m3DragOver(event)" ondragleave="m3DragLeave(event)" ondrop="m3OnDrop(event)" onclick="document.getElementById('m3-file').click()">
-        <div id="m3-drop-inner">
-          <div style="font-size:28px;color:var(--color-text-tertiary);margin-bottom:8px">⬇</div>
-          <div style="font-size:13px;font-weight:500">Glissez-déposez le CSV ici ou cliquez pour parcourir</div>
-          <div style="font-size:12px;color:var(--color-text-secondary);margin-top:5px">Colonnes attendues : <code>TYPE, ID, REF, COM, nom_com, url_com, categorie_defaut, meta_titre_com, meta_description_com, contenu_com</code></div>
-        </div>
-        <input type="file" id="m3-file" accept=".csv" style="display:none" onclick="event.stopPropagation()" onchange="m3OnFile(this.files[0])">
+      <div id="m3-empty-warn" style="display:none;font-size:13px;color:var(--color-text-secondary);margin-bottom:12px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">
+        Aucun contenu chargé — importez d'abord le CSV "Contenu du site" dans l'onglet <strong>Importer</strong>.
       </div>
-      <p id="m3-import-msg" style="font-size:12px;margin-top:6px;color:var(--color-text-secondary)"></p>
-      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+      <div style="display:flex;gap:8px;align-items:center">
         <input type="text" id="m3-url" placeholder="URL à analyser, ex : /1011-cartons" style="flex:1" onkeydown="if(event.key==='Enter')m3Analyze()">
         <button onclick="m3Analyze()">Analyser</button>
       </div>
@@ -496,13 +525,14 @@ function loadExample(){allLinks=[...EXAMPLE];expandedRow=null;renderTable();docu
 function clearAll(){allLinks=[];links=[];nodes={};expandedRow=null;document.getElementById('import-msg').textContent='Données effacées.';renderTable();}
 
 function switchTab(t){
-  ['table','stats','import','mots-cles','m3'].forEach((id,i)=>{
+  ['table','stats','mots-cles','m3','import'].forEach((id,i)=>{
     document.getElementById('tab-'+id).style.display=id===t?'':'none';
     document.querySelectorAll('#main-tab-bar button.tab')[i].classList.toggle('active',id===t);
   });
   if(t==='table'){buildGraph();renderTable();}
   if(t==='stats'){buildGraph();renderStatsTab();}
   if(t==='mots-cles'){switchKWSubTab(kwSub);}
+  if(t==='m3'){document.getElementById('m3-empty-warn').style.display=m3Data.length===0?'':'none';}
 }
 
 // ─── MODULE 3 — SUGGESTIONS MAILLAGE ─────────────────────────────────────────
@@ -514,6 +544,48 @@ function m3DragOver(e){e.preventDefault();document.getElementById('m3-drop').cla
 function m3DragLeave(){document.getElementById('m3-drop').classList.remove('dragover');}
 function m3OnDrop(e){e.preventDefault();m3DragLeave();const f=e.dataTransfer.files[0];if(f)m3OnFile(f);}
 function m3OnFile(f){const r=new FileReader();r.onload=ev=>m3ParseCSV(ev.target.result,f.name);r.readAsText(f,'UTF-8');}
+
+function impDragOver(e){e.preventDefault();document.getElementById('imp-drop').classList.add('dragover');}
+function impDragLeave(){document.getElementById('imp-drop').classList.remove('dragover');}
+function impOnDrop(e){e.preventDefault();impDragLeave();const f=e.dataTransfer.files[0];if(f)impOnFile(f);}
+function impOnFile(f){
+  const r=new FileReader();
+  r.onload=ev=>{
+    const raw=ev.target.result.replace(/^﻿/,'');
+    const lines=raw.trim().split('\n');
+    if(lines.length<2){document.getElementById('imp-file-msg').textContent='Fichier vide ou invalide.';return;}
+    const hdr=parseCSVLine(lines[0]).map(h=>h.trim().replace(/^"|"$/g,'').toLowerCase());
+    const iSrc=hdr.findIndex(h=>h==='source');
+    const iDst=hdr.findIndex(h=>h==='destination');
+    const iType=hdr.findIndex(h=>h==='type'||h==='type_source');
+    const iPos=hdr.findIndex(h=>h.includes('link position')||h==='position'||h==='link_position');
+    let normalized;
+    if(iSrc>=0&&iDst>=0){
+      // Format Screaming Frog ou similaire avec entête
+      const rows=['source,destination,type_source,position'];
+      for(let i=1;i<lines.length;i++){
+        if(!lines[i].trim())continue;
+        const p=parseCSVLine(lines[i]);
+        const from=(p[iSrc]||'').trim().replace(/^"|"$/g,'');
+        const to=(p[iDst]||'').trim().replace(/^"|"$/g,'');
+        if(!from||!to||from===to)continue;
+        const type=iType>=0?(p[iType]||'').trim().replace(/^"|"$/g,''):'';
+        let pos='body';
+        if(iPos>=0){const rp=(p[iPos]||'').trim().replace(/^"|"$/g,'').toLowerCase();if(rp.includes('nav'))pos='header_nav';else if(rp.includes('footer'))pos='footer';}
+        rows.push(`${from},${to},${type},${pos}`);
+      }
+      normalized=rows.join('\n');
+    }else{normalized=raw;}
+    document.getElementById('import-area').value=normalized;
+    importData();
+    document.getElementById('imp-drop').classList.remove('dragover');
+    document.getElementById('imp-drop').classList.add('loaded');
+    const count=lines.length-1;
+    document.getElementById('imp-drop-inner').innerHTML=`<div style="font-size:13px;font-weight:500;color:#0F6E56">✓ ${escHtml(f.name)}</div><div style="font-size:12px;color:#0F6E56;margin-top:3px">${count} lignes — cliquer pour changer</div>`;
+    document.getElementById('imp-file-msg').textContent='';
+  };
+  r.readAsText(f,'UTF-8');
+}
 
 function m3ParseCSV(raw,fname){
   try{
@@ -636,7 +708,7 @@ function m3Analyze(){
   const urlIn=(document.getElementById('m3-url').value||'').trim();
   const res=document.getElementById('m3-results');
   if(!urlIn){res.innerHTML='<div style="font-size:13px;color:#A32D2D;margin-top:8px">Saisissez une URL.</div>';return;}
-  if(!m3Data.length){res.innerHTML='<div style="font-size:13px;color:#A32D2D;margin-top:8px">Chargez d\'abord le CSV.</div>';return;}
+  if(!m3Data.length){res.innerHTML='<div style="font-size:13px;color:#A32D2D;margin-top:8px">Importez d\'abord le CSV "Contenu du site" depuis l\'onglet Importer.</div>';return;}
   const norm=m3Norm(urlIn);
   const page=m3Data.find(p=>m3Norm(p.url_com||'')===norm);
   if(!page){res.innerHTML=`<div style="font-size:13px;color:#A32D2D;margin-top:8px">URL <code>${escHtml(norm)}</code> non trouvée dans le CSV.</div>`;return;}
