@@ -73,6 +73,20 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
 .info-box{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:10px;line-height:1.6}
 .params-input{font-size:12px;font-family:var(--font-mono);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 8px;background:var(--color-background-primary);color:var(--color-text-primary);width:100%;margin-top:6px;outline:none}
 .col-sep{border-left:1px solid var(--color-border-tertiary) !important}
+.m3-drop{border:2px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.m3-drop:hover,.m3-drop.dragover{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
+.m3-drop.loaded{border-color:#1D9E75;background:#E1F5EE;cursor:pointer}
+@media(prefers-color-scheme:dark){.m3-drop.loaded{background:#0d3327;border-color:#1D9E75}}
+.m3-panel{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:1rem}
+.m3-panel-head{padding:10px 14px;background:var(--color-background-secondary);font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.m3-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:flex;align-items:flex-start;justify-content:center;padding:3vh 1rem;overflow-y:auto}
+.m3-modal-inner{background:var(--color-background-primary);border-radius:var(--border-radius-lg);width:100%;max-width:820px;border:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;max-height:92vh;margin:auto}
+.m3-modal-hdr{padding:14px 18px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-shrink:0}
+.m3-modal-body{padding:16px 18px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px}
+.m3-section-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);margin-bottom:6px}
+.m3-justify-box{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;line-height:1.6}
+.m3-preview{font-size:12.5px;line-height:1.9;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;background:var(--color-background-secondary);max-height:320px;overflow-y:auto}
+.m3-preview mark{background:#FAEEDA;padding:0 2px;border-radius:2px;font-weight:500;font-style:normal;color:var(--color-text-primary)}
 </style>
 </head>
 <body>
@@ -82,10 +96,12 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
     <p>Analysez et optimisez le maillage interne de votre site</p>
   </div>
   <div class="card">
-    <div class="tab-bar">
+    <div class="tab-bar" id="main-tab-bar">
       <button class="tab active" onclick="switchTab('table')">Tableau</button>
       <button class="tab" onclick="switchTab('stats')">Statistiques</button>
       <button class="tab" onclick="switchTab('import')">Importer</button>
+      <button class="tab" onclick="switchTab('mots-cles')">Mots-clés</button>
+      <button class="tab" onclick="switchTab('m3')">Suggestions maillage</button>
     </div>
 
     <!-- TABLEAU -->
@@ -160,6 +176,99 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
         <button onclick="clearAll()">Tout effacer</button>
       </div>
       <p id="import-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
+    </div>
+
+    <!-- MODULE 2 — MOTS-CLÉS -->
+    <div id="tab-mots-cles" style="display:none">
+      <div class="info-box">
+        CSV attendu : <code>Requête, Site, URL, Type de page, Clics, Impressions, Volume SE, CTR, Position, Position N-1, Variation de position</code><br>
+        Seules les lignes <strong>Site = COM</strong> sont analysées. L'entête est requise.
+      </div>
+      <textarea id="kw-area" placeholder="Requête,Site,URL,Type de page,Clics,Impressions,Volume SE,CTR,Position,Position N-1,Variation de position&#10;boites carton,COM,/1011-cartons,Categorie,85,1200,1800,7%,14,12,▼"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button onclick="importKWData()">Importer</button>
+        <button onclick="clearKWData()">Effacer</button>
+      </div>
+      <p id="kw-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
+      <div class="tab-bar" style="margin-top:1.25rem">
+        <button class="tab active" id="kwbtn-quickwins" onclick="switchKWSubTab('quickwins')">Quick Wins <span id="kwcnt-quickwins" style="color:var(--color-text-tertiary);font-size:11px">(0)</span></button>
+        <button class="tab" id="kwbtn-declin" onclick="switchKWSubTab('declin')">Déclin <span id="kwcnt-declin" style="color:var(--color-text-tertiary);font-size:11px">(0)</span></button>
+        <button class="tab" id="kwbtn-ctr_anormal" onclick="switchKWSubTab('ctr_anormal')">CTR Anormal <span id="kwcnt-ctr_anormal" style="color:var(--color-text-tertiary);font-size:11px">(0)</span></button>
+        <button class="tab" id="kwbtn-non_couvert" onclick="switchKWSubTab('non_couvert')">Univers Non Couvert <span id="kwcnt-non_couvert" style="color:var(--color-text-tertiary);font-size:11px">(0)</span></button>
+      </div>
+      <div id="kwcont-quickwins">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <p style="font-size:12px;color:var(--color-text-secondary)">Position 10–20 · Impressions ≥ 100 · triés par impressions ↓</p>
+          <button onclick="copyKWCSV('quickwins',this)">Copier en CSV</button>
+        </div>
+        <div id="kwtbl-quickwins"></div>
+      </div>
+      <div id="kwcont-declin" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <p style="font-size:12px;color:var(--color-text-secondary)">Variation ▼ · Position ≤ 20 · Impressions ≥ 100 · triés par impressions ↓</p>
+          <button onclick="copyKWCSV('declin',this)">Copier en CSV</button>
+        </div>
+        <div id="kwtbl-declin"></div>
+      </div>
+      <div id="kwcont-ctr_anormal" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <p style="font-size:12px;color:var(--color-text-secondary)">Position ≤ 10 · CTR &lt; 1% · Impressions ≥ 500 · triés par impressions ↓</p>
+          <button onclick="copyKWCSV('ctr_anormal',this)">Copier en CSV</button>
+        </div>
+        <div id="kwtbl-ctr_anormal"></div>
+      </div>
+      <div id="kwcont-non_couvert" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <p style="font-size:12px;color:var(--color-text-secondary)">Position &gt; 20 · Impressions ≥ 200 · triés par impressions ↓</p>
+          <button onclick="copyKWCSV('non_couvert',this)">Copier en CSV</button>
+        </div>
+        <div id="kwtbl-non_couvert"></div>
+      </div>
+    </div>
+
+    <!-- MODULE 3 — SUGGESTIONS MAILLAGE -->
+    <div id="tab-m3" style="display:none">
+      <div id="m3-drop" class="m3-drop" ondragover="m3DragOver(event)" ondragleave="m3DragLeave(event)" ondrop="m3OnDrop(event)" onclick="document.getElementById('m3-file').click()">
+        <div id="m3-drop-inner">
+          <div style="font-size:28px;color:var(--color-text-tertiary);margin-bottom:8px">⬇</div>
+          <div style="font-size:13px;font-weight:500">Glissez-déposez le CSV ici ou cliquez pour parcourir</div>
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-top:5px">Colonnes attendues : <code>TYPE, ID, REF, COM, nom_com, url_com, categorie_defaut, meta_titre_com, meta_description_com, contenu_com</code></div>
+        </div>
+        <input type="file" id="m3-file" accept=".csv" style="display:none" onclick="event.stopPropagation()" onchange="m3OnFile(this.files[0])">
+      </div>
+      <p id="m3-import-msg" style="font-size:12px;margin-top:6px;color:var(--color-text-secondary)"></p>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+        <input type="text" id="m3-url" placeholder="URL à analyser, ex : /1011-cartons" style="flex:1" onkeydown="if(event.key==='Enter')m3Analyze()">
+        <button onclick="m3Analyze()">Analyser</button>
+      </div>
+      <div id="m3-results" style="margin-top:1rem"></div>
+
+      <!-- Popin aperçu -->
+      <div id="m3-modal" class="m3-modal" style="display:none" onclick="if(event.target===this)m3CloseModal()">
+        <div class="m3-modal-inner">
+          <div class="m3-modal-hdr">
+            <div style="min-width:0">
+              <div style="font-size:13px;font-weight:500" id="m3-modal-title"></div>
+              <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px" id="m3-modal-sub"></div>
+            </div>
+            <button onclick="m3CloseModal()" style="flex-shrink:0;padding:4px 12px">✕ Fermer</button>
+          </div>
+          <div class="m3-modal-body">
+            <div>
+              <div class="m3-section-label">Justification</div>
+              <div class="m3-justify-box" id="m3-modal-justify"></div>
+            </div>
+            <div>
+              <div class="m3-section-label">Variantes d'ancres &amp; HTML (cliquer pour copier)</div>
+              <div id="m3-modal-snippets"></div>
+            </div>
+            <div>
+              <div class="m3-section-label">Aperçu du contenu avec le lien inséré</div>
+              <div class="m3-preview" id="m3-modal-preview"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -387,12 +496,333 @@ function loadExample(){allLinks=[...EXAMPLE];expandedRow=null;renderTable();docu
 function clearAll(){allLinks=[];links=[];nodes={};expandedRow=null;document.getElementById('import-msg').textContent='Données effacées.';renderTable();}
 
 function switchTab(t){
-  ['table','stats','import'].forEach((id,i)=>{
+  ['table','stats','import','mots-cles','m3'].forEach((id,i)=>{
     document.getElementById('tab-'+id).style.display=id===t?'':'none';
-    document.querySelectorAll('button.tab')[i].classList.toggle('active',id===t);
+    document.querySelectorAll('#main-tab-bar button.tab')[i].classList.toggle('active',id===t);
   });
   if(t==='table'){buildGraph();renderTable();}
   if(t==='stats'){buildGraph();renderStatsTab();}
+  if(t==='mots-cles'){switchKWSubTab(kwSub);}
+}
+
+// ─── MODULE 3 — SUGGESTIONS MAILLAGE ─────────────────────────────────────────
+let m3Data=[],m3CopyBuf=[],m3ModalBuf=[];
+const M3BASE='https://www.embaleo.com';
+const M3STOPS=new Set('le,la,les,de,du,des,un,une,et,ou,à,au,aux,avec,sur,pour,par,en,dans,que,qui,se,ne,pas,plus,ce,il,elle,ils,elles,nous,vous,on,est,son,sa,ses,leur,leurs,y,dont,où,cette,ces,tout,toute,très,bien,aussi,même,comme,mais,donc,car,ni,or,nos,votre,notre,vos,afin,selon,entre,sans,lors,après,avant,chez'.split(','));
+
+function m3DragOver(e){e.preventDefault();document.getElementById('m3-drop').classList.add('dragover');}
+function m3DragLeave(){document.getElementById('m3-drop').classList.remove('dragover');}
+function m3OnDrop(e){e.preventDefault();m3DragLeave();const f=e.dataTransfer.files[0];if(f)m3OnFile(f);}
+function m3OnFile(f){const r=new FileReader();r.onload=ev=>m3ParseCSV(ev.target.result,f.name);r.readAsText(f,'UTF-8');}
+
+function m3ParseCSV(raw,fname){
+  try{
+    const lines=raw.replace(/^﻿/,'').trim().split('\n');
+    const hdrs=parseCSVLine(lines[0]).map(h=>h.trim().replace(/^"|"$/g,''));
+    const data=[];
+    for(let i=1;i<lines.length;i++){
+      if(!lines[i].trim())continue;
+      const v=parseCSVLine(lines[i]);
+      const obj={};hdrs.forEach((h,j)=>obj[h]=(v[j]||'').trim().replace(/^"|"$/g,''));
+      data.push(obj);
+    }
+    m3Data=data;
+    const drop=document.getElementById('m3-drop');
+    drop.classList.remove('dragover');drop.classList.add('loaded');
+    document.getElementById('m3-drop-inner').innerHTML=`<div style="font-size:13px;font-weight:500;color:#0F6E56">✓ ${escHtml(fname)}</div><div style="font-size:12px;color:#0F6E56;margin-top:3px">${data.length} pages chargées — cliquer pour changer</div>`;
+    document.getElementById('m3-import-msg').textContent='';
+  }catch(err){
+    const msg=document.getElementById('m3-import-msg');msg.style.color='#A32D2D';msg.textContent='Erreur : '+err.message;
+  }
+}
+
+function m3Norm(u){return(u||'').replace(/https?:\/\/www\.embaleo\.com/,'').toLowerCase().replace(/\/$/,'')||'/';}
+function m3TypeScore(t){if(!t)return 1;const s=t.toLowerCase();if(s.includes('hub'))return 5;if(s.includes('catég')||s.includes('categ'))return 4;if(s.includes('sku')||s.includes('produit'))return 3;if(s.includes('blog')||s.includes('article')||s.includes('cms'))return 2;return 1;}
+function m3Strip(s){return(s||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();}
+function m3Words(s){const t=m3Strip(s);return t?t.split(' ').filter(w=>w.length>0).length:0;}
+function m3KWs(text){return[...new Set((text||'').toLowerCase().replace(/[^a-zàâäéèêëîïôùûüç\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!M3STOPS.has(w)))];}
+
+function m3FindInContent(content,kws){
+  const text=m3Strip(content);const lower=text.toLowerCase();
+  for(const kw of [...kws].sort((a,b)=>b.length-a.length)){
+    const idx=lower.indexOf(kw);
+    if(idx!==-1){const s=Math.max(0,idx-60),e=Math.min(text.length,idx+kw.length+60);return{kw,excerpt:(s>0?'…':'')+text.slice(s,e)+(e<text.length?'…':''),text};}
+  }
+  return null;
+}
+
+function m3GenAnchors(page,foundKW){
+  const acc=[];
+  if(foundKW&&foundKW.length>3)acc.push(foundKW);
+  const nom=(page.nom_com||'').trim().toLowerCase();
+  if(nom&&!acc.includes(nom))acc.push(nom);
+  const nomKWs=m3KWs(page.nom_com||'');
+  if(nomKWs.length>=2){const s=nomKWs.slice(0,2).join(' ');if(!acc.includes(s))acc.push(s);}
+  const titre=((page.meta_titre_com||'').split(/[|\-–—]/)[0]||'').trim();
+  const titreKWs=m3KWs(titre);
+  if(titreKWs.length>=3){const lt=titreKWs.slice(0,3).join(' ');if(!acc.includes(lt))acc.push(lt);}
+  if(titreKWs.length>=2&&nomKWs.length>=1){const lt2=nomKWs[0]+' '+titreKWs.filter(w=>!nomKWs.includes(w)).slice(0,2).join(' ');if(lt2.trim().length>8&&!acc.includes(lt2.trim()))acc.push(lt2.trim());}
+  return[...new Set(acc)].filter(a=>a.length>3&&a.length<70).slice(0,4);
+}
+
+function m3Justify(page,score,foundKW,typeScore){
+  const tl={5:'Hub catégorie — priorité maximale ✦ (score 5)',4:'Catégorie — haute priorité (score 4)',3:'Produit — priorité modérée (score 3)',2:'Blog/CMS — priorité secondaire (score 2)',1:"Page secondaire — score 1, à éviter sauf absence d'alternative"};
+  const parts=[tl[typeScore]||'Page secondaire'];
+  if(foundKW)parts.push(`terme "${foundKW}" détecté dans votre contenu → ancre naturelle, emplacement identifié`);
+  else parts.push('thématique connexe — trouver un terme sémantiquement proche dans le corps du texte');
+  if(score>=5)parts.push('correspondance sémantique forte — mailler en priorité');
+  else if(score>=4)parts.push('bonne pertinence thématique');
+  const nom=page.nom_com||'';
+  if(nom)parts.push(`varier l'ancre : "${nom.toLowerCase()}", "${m3KWs(nom).slice(0,2).join(' ')}", ou longue traîne contextuelle`);
+  return parts.join(' · ');
+}
+
+function m3BuildPreview(content,anchor,href,foundKW,useMi){
+  const text=m3Strip(content);
+  if(!text)return'<em style="color:var(--color-text-secondary)">Aucun contenu disponible pour cette page dans le CSV.</em>';
+  const cls=useMi?' class="mi"':'';
+  const term=(foundKW||anchor);
+  const lower=text.toLowerCase();
+  const idx=lower.indexOf(term.toLowerCase());
+  if(idx!==-1){
+    const matched=text.slice(idx,idx+term.length);
+    return escHtml(text.slice(0,idx))+'<mark><a href="'+escHtml(href)+'"'+cls+'>'+escHtml(matched)+'</a></mark>'+escHtml(text.slice(idx+term.length));
+  }
+  const dotIdx=text.search(/\.\s[A-ZÀ-ÖØ0-9«"]/);
+  if(dotIdx>20&&dotIdx<text.length-20){
+    return escHtml(text.slice(0,dotIdx+1))+'<mark> [✦ Insérer ici : <a href="'+escHtml(href)+'"'+cls+'>'+escHtml(anchor)+'</a>]</mark>'+escHtml(text.slice(dotIdx+1));
+  }
+  return escHtml(text)+'<mark> [✦ Insérer : <a href="'+escHtml(href)+'"'+cls+'>'+escHtml(anchor)+'</a>]</mark>';
+}
+
+function m3SnippetsHtml(items){
+  return items.map(it=>{
+    const html=`<a href="${it.href}"${it.mi?' class="mi"':''}>${it.anchor}</a>`;
+    m3CopyBuf.push(html);const cidx=m3CopyBuf.length-1;
+    const badge=it.mi
+      ?'<span style="font-size:10px;color:#085041;background:#E1F5EE;padding:1px 6px;border-radius:3px;white-space:nowrap">class="mi"</span>'
+      :'<span style="font-size:10px;color:#444441;background:#F1EFE8;padding:1px 6px;border-radius:3px;white-space:nowrap">sans classe</span>';
+    return`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)">
+      <code style="flex:1;font-size:11px;background:var(--color-background-secondary);padding:4px 8px;border-radius:4px;overflow:auto;white-space:nowrap">${escHtml(html)}</code>
+      ${badge}
+      <button onclick="m3CopyByIdx(${cidx},this)" style="font-size:11px;padding:3px 10px;white-space:nowrap">Copier</button>
+    </div>`;
+  }).join('');
+}
+
+function m3OpenModal(idx){
+  const d=m3ModalBuf[idx];if(!d)return;
+  document.getElementById('m3-modal-title').textContent=d.title;
+  document.getElementById('m3-modal-sub').textContent=d.subtitle;
+  document.getElementById('m3-modal-justify').textContent=d.justify;
+  document.getElementById('m3-modal-snippets').innerHTML=d.snippetsHtml;
+  document.getElementById('m3-modal-preview').innerHTML=d.previewHtml;
+  document.getElementById('m3-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function m3CloseModal(){document.getElementById('m3-modal').style.display='none';document.body.style.overflow='';}
+
+function m3CopyByIdx(idx,btn){
+  navigator.clipboard.writeText(m3CopyBuf[idx]||'').then(()=>{const o=btn.textContent;btn.textContent='Copié !';setTimeout(()=>btn.textContent=o,1500);});
+}
+
+function m3ScoreBadge(s){
+  const bg=['','#f5f5f4','#FAEEDA','#E6F1FB','#E1F5EE','#c6eddf'][Math.min(s,5)];
+  const col=['','#6b6b69','#854F0B','#185FA5','#085041','#085041'][Math.min(s,5)];
+  return`<span style="display:inline-block;background:${bg};color:${col};font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px">${s}</span>`;
+}
+
+function m3Analyze(){
+  const urlIn=(document.getElementById('m3-url').value||'').trim();
+  const res=document.getElementById('m3-results');
+  if(!urlIn){res.innerHTML='<div style="font-size:13px;color:#A32D2D;margin-top:8px">Saisissez une URL.</div>';return;}
+  if(!m3Data.length){res.innerHTML='<div style="font-size:13px;color:#A32D2D;margin-top:8px">Chargez d\'abord le CSV.</div>';return;}
+  const norm=m3Norm(urlIn);
+  const page=m3Data.find(p=>m3Norm(p.url_com||'')===norm);
+  if(!page){res.innerHTML=`<div style="font-size:13px;color:#A32D2D;margin-top:8px">URL <code>${escHtml(norm)}</code> non trouvée dans le CSV.</div>`;return;}
+
+  m3CopyBuf=[];m3ModalBuf=[];
+  const content=m3Strip(page.contenu_com||'');
+  const wc=m3Words(content);
+  const qMin=Math.max(1,Math.floor(wc/100));
+  const qMax=Math.max(1,Math.floor(wc/80));
+  const targetKWs=m3KWs((page.nom_com||'')+' '+(page.meta_titre_com||''));
+  // ── Panel A : liens sortants depuis la page cible ──────────────
+  const targetFullUrl=(page.url_com||'').startsWith('http')?page.url_com:M3BASE+(page.url_com||urlIn);
+  const out=[];
+  // Lien obligatoire intro
+  {
+    const anchor='emballage colis';const href=M3BASE+'/1013-emballages-colis';
+    const html=`<a href="${href}" class="mi">${anchor}</a>`;
+    m3CopyBuf.push(html);const copyIdx=m3CopyBuf.length-1;
+    const previewHtml=m3BuildPreview(page.contenu_com||'',anchor,href,anchor,true);
+    const snippetsHtml=m3SnippetsHtml([{anchor,href,mi:true}]);
+    m3ModalBuf.push({title:'Lien obligatoire — intro',subtitle:href,justify:'Obligatoire dans chaque intro de page · insérer class="mi" sur le terme naturel dans la première phrase',snippetsHtml,previewHtml});
+    const modalIdx=m3ModalBuf.length-1;
+    out.push({score:99,mandatory:true,note:'Obligatoire — intro de page',url:'/1013-emballages-colis',nom:'Emballages colis',type:'Hub',anchor,copyIdx,modalIdx});
+  }
+
+  const seen=new Set([norm,'/1013-emballages-colis','/132','/183']);
+  m3Data.forEach(p=>{
+    const pu=m3Norm(p.url_com||'');if(seen.has(pu))return;seen.add(pu);
+    const ts=m3TypeScore(p.TYPE||'');if(ts<2)return;
+    const fi=m3FindInContent(page.contenu_com||'',m3KWs((p.nom_com||'')+' '+(p.meta_titre_com||'')));
+    const score=Math.min(ts+(fi?2:0),5);if(score<2)return;
+    const anchors=m3GenAnchors(p,fi?fi.kw:null);
+    const bestAnchor=anchors[0]||m3KWs(p.nom_com||'').slice(0,2).join(' ')||p.nom_com||pu;
+    const href=(p.url_com||'').startsWith('http')?p.url_com:M3BASE+(p.url_com||pu);
+    const justify=m3Justify(p,score,fi?fi.kw:null,ts);
+    const snippetsHtml=m3SnippetsHtml(anchors.map(a=>({anchor:a,href,mi:true})));
+    const previewHtml=m3BuildPreview(page.contenu_com||'',bestAnchor,href,fi?fi.kw:null,true);
+    const modalIdx=m3ModalBuf.push({title:p.nom_com||pu,subtitle:href,justify,snippetsHtml,previewHtml})-1;
+    const html=`<a href="${href}" class="mi">${bestAnchor}</a>`;m3CopyBuf.push(html);
+    out.push({score,mandatory:false,note:justify,url:p.url_com||pu,nom:p.nom_com||pu,type:p.TYPE||'',anchor:bestAnchor,copyIdx:m3CopyBuf.length-1,modalIdx});
+  });
+
+  // Bloc nav standard fin de page
+  {
+    const navHtml=`<nav style="text-align:center">\n  <a href="${M3BASE}/132">[Lien nav /132]</a>\n  <a href="${M3BASE}/183">[Lien nav /183]</a>\n</nav>`;
+    m3CopyBuf.push(navHtml);const copyIdx=m3CopyBuf.length-1;
+    m3ModalBuf.push({title:'Bloc navigation standard',subtitle:'/132 + /183',justify:'Obligatoire en fin de page — centré, sans class="mi", présent sur toutes les pages',snippetsHtml:m3SnippetsHtml([{anchor:'/132',href:M3BASE+'/132',mi:false},{anchor:'/183',href:M3BASE+'/183',mi:false}]),previewHtml:'<em>Insérer bloc centré en fin de contenu, avant le footer.</em>'});
+    out.push({score:-1,mandatory:true,note:'Bloc nav standard — fin de page, centré, sans class="mi"',url:'/132 + /183',nom:'Navigation standard',type:'nav',anchor:'(bloc centré)',copyIdx,modalIdx:m3ModalBuf.length-1});
+  }
+  out.sort((a,b)=>{if(a.score===99)return-1;if(b.score===99)return 1;if(a.score===-1)return 1;if(b.score===-1)return-1;return b.score-a.score;});
+
+  // ── Panel B : pages pouvant lier vers la page cible ────────────
+  const inb=[];const seenB=new Set([norm]);
+  m3Data.forEach(p=>{
+    const pu=m3Norm(p.url_com||'');if(seenB.has(pu))return;seenB.add(pu);
+    const fi=m3FindInContent(p.contenu_com||'',targetKWs);if(!fi)return;
+    const ts=m3TypeScore(p.TYPE||'');
+    const score=Math.min(ts+(fi.kw.length>5?1:0),5);
+    const anchors=m3GenAnchors(page,fi.kw);
+    const bestAnchor=anchors[0]||fi.kw;
+    const href=targetFullUrl;
+    const justify=m3Justify(page,score,fi.kw,m3TypeScore(page.TYPE||''));
+    const snippetsHtml=m3SnippetsHtml(anchors.map(a=>({anchor:a,href,mi:true})));
+    const previewHtml=m3BuildPreview(p.contenu_com||'',bestAnchor,href,fi.kw,true);
+    const modalIdx=m3ModalBuf.push({title:'Lien depuis : '+(p.nom_com||pu),subtitle:p.url_com||pu,justify,snippetsHtml,previewHtml})-1;
+    const html=`<a href="${href}" class="mi">${bestAnchor}</a>`;m3CopyBuf.push(html);
+    inb.push({score,sourceUrl:p.url_com||pu,sourceName:p.nom_com||pu,sourceType:p.TYPE||'',excerpt:fi.excerpt,anchor:bestAnchor,copyIdx:m3CopyBuf.length-1,modalIdx});
+  });
+  inb.sort((a,b)=>b.score-a.score);
+
+  // ── Rendu ────────────────────────────────────────────────────────
+  const nonMand=out.filter(l=>!l.mandatory&&l.score>0).length;
+  const overQuota=nonMand>qMax;
+  const actBtns=(copyIdx,modalIdx)=>`<div style="display:flex;gap:6px;justify-content:center"><button onclick="m3CopyByIdx(${copyIdx},this)" style="font-size:11px;padding:3px 9px;white-space:nowrap">Copier</button><button onclick="m3OpenModal(${modalIdx})" style="font-size:11px;padding:3px 9px;white-space:nowrap;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary)">Aperçu</button></div>`;
+
+  const outRows=out.map(l=>{
+    const btns=actBtns(l.copyIdx,l.modalIdx);
+    if(l.score===-1)return`<tr style="background:var(--color-background-secondary)"><td colspan="5" style="padding:8px 10px;font-size:12px;color:#185FA5;font-weight:500">⚠ Bloc nav standard obligatoire en fin de page (/132 + /183) — centré, sans class="mi"</td><td style="padding:8px 10px;text-align:center">${btns}</td></tr>`;
+    const badge=l.score===99?`<span class="badge b-green" style="font-size:10px">Obligatoire</span>`:m3ScoreBadge(l.score);
+    const miTag='<span style="font-size:10px;color:#085041;background:#E1F5EE;padding:1px 5px;border-radius:3px;margin-left:4px">class="mi"</span>';
+    return`<tr><td style="text-align:center">${badge}</td><td class="td-url" style="font-size:12px" title="${escHtml(l.url)}">${escHtml(l.url)}</td><td style="font-size:12px">${escHtml(l.nom)}</td><td style="font-size:12px"><code style="background:var(--color-background-secondary);padding:2px 5px;border-radius:3px;font-size:11px">${escHtml(l.anchor)}</code>${miTag}</td><td style="font-size:11px;color:var(--color-text-secondary);font-style:italic;max-width:200px">${escHtml(l.note)}</td><td style="text-align:center">${btns}</td></tr>`;
+  }).join('');
+
+  const inbRows=inb.map(l=>{
+    const btns=actBtns(l.copyIdx,l.modalIdx);
+    return`<tr><td style="text-align:center">${m3ScoreBadge(l.score)}</td><td class="td-url" style="font-size:12px" title="${escHtml(l.sourceUrl)}">${escHtml(l.sourceUrl)}</td><td style="font-size:12px;color:var(--color-text-secondary)">${escHtml(l.sourceType)}</td><td style="font-size:12px;color:var(--color-text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(l.excerpt)}">${escHtml(l.excerpt)}</td><td style="font-size:12px"><code style="background:var(--color-background-secondary);padding:2px 5px;border-radius:3px;font-size:11px">${escHtml(l.anchor)}</code></td><td style="text-align:center">${btns}</td></tr>`;
+  }).join('');
+
+  res.innerHTML=`
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">
+    <span>Page : <strong>${escHtml(page.nom_com||norm)}</strong></span>
+    <span>${wc} mots de contenu</span>
+    <span>Quota liens mi : <strong>${qMin}–${qMax}</strong></span>
+    <span style="color:${overQuota?'#A32D2D':'#0F6E56'}">${nonMand} liens corps suggérés${overQuota?' ⚠ dépasse le quota':''}</span>
+  </div>
+  <div class="m3-panel">
+    <div class="m3-panel-head"><span>↗ Suggestion de nouveaux liens sur l'URL</span><span style="font-size:12px;font-weight:400;color:var(--color-text-secondary)">quota corps : ${qMin}–${qMax} liens mi</span></div>
+    <div><div class="tbl-outer" style="border:none;border-radius:0;max-height:420px"><div class="tbl-scroll">
+      <table class="sort-table" style="min-width:660px"><thead><tr>
+        <th style="width:60px">Score</th><th class="th-url">URL cible</th><th style="min-width:110px">Nom</th><th style="min-width:150px">Ancre principale</th><th>Justification</th><th>Actions</th>
+      </tr></thead><tbody>${outRows}</tbody></table>
+    </div></div></div>
+  </div>
+  <div class="m3-panel">
+    <div class="m3-panel-head"><span>↙ Suggestion de maillage pour cette URL</span><span style="font-size:12px;font-weight:400;color:var(--color-text-secondary)">${inb.length} pages sources identifiées</span></div>
+    <div>${inb.length===0
+      ?'<div style="padding:12px 14px;font-size:13px;color:var(--color-text-secondary)">Aucune page ne mentionne les mots-clés de cette URL dans son contenu.</div>'
+      :`<div class="tbl-outer" style="border:none;border-radius:0;max-height:420px"><div class="tbl-scroll"><table class="sort-table" style="min-width:600px"><thead><tr>
+        <th style="width:60px">Score</th><th class="th-url">Page source</th><th style="min-width:80px">Type</th><th class="th-url">Extrait contexte</th><th style="min-width:120px">Ancre suggérée</th><th>Actions</th>
+      </tr></thead><tbody>${inbRows}</tbody></table></div></div>`
+    }</div>
+  </div>`;}
+
+
+// ─── MODULE 2 — MOTS-CLÉS ────────────────────────────────────────────────────
+let kwData=[],kwSub='quickwins';
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function kwNum(v){return parseFloat((v||'0').replace(/[%\s]/g,'').replace(',','.'))||0;}
+function parseKW(raw){
+  const lines=raw.replace(/^﻿/,'').trim().split('\n');
+  if(lines.length<2)return[];
+  const hdrs=parseCSVLine(lines[0]).map(h=>h.trim());
+  const out=[];
+  for(let i=1;i<lines.length;i++){
+    if(!lines[i].trim())continue;
+    const v=parseCSVLine(lines[i]);
+    const obj={};hdrs.forEach((h,j)=>obj[h]=(v[j]||'').trim());
+    out.push(obj);
+  }
+  return out;
+}
+function kwSubsets(){
+  const d=kwData;
+  const qw=d.filter(r=>{const p=kwNum(r['Position']),im=kwNum(r['Impressions']);return p>=10&&p<=20&&im>=100;}).sort((a,b)=>kwNum(b['Impressions'])-kwNum(a['Impressions']));
+  const dc=d.filter(r=>{const p=kwNum(r['Position']),im=kwNum(r['Impressions']);return(r['Variation de position']||'').includes('▼')&&p<=20&&im>=100;}).sort((a,b)=>kwNum(b['Impressions'])-kwNum(a['Impressions']));
+  const ca=d.filter(r=>{const p=kwNum(r['Position']),im=kwNum(r['Impressions']),ctr=kwNum(r['CTR']);return p<=10&&ctr<1&&im>=500;}).sort((a,b)=>kwNum(b['Impressions'])-kwNum(a['Impressions']));
+  const nc=d.filter(r=>{const p=kwNum(r['Position']),im=kwNum(r['Impressions']);return p>20&&im>=200;}).sort((a,b)=>kwNum(b['Impressions'])-kwNum(a['Impressions']));
+  return{quickwins:qw,declin:dc,ctr_anormal:ca,non_couvert:nc};
+}
+function kwPosBadge(v){const p=Math.round(kwNum(v)*10)/10;if(p<=10)return`<span class="badge b-green">${p}</span>`;if(p<=20)return`<span class="badge b-amber">${p}</span>`;return`<span class="badge b-red">${p}</span>`;}
+function renderKWTable(id,rows){
+  const el=document.getElementById(id);if(!el)return;
+  if(!rows.length){el.innerHTML='<div style="font-size:13px;color:var(--color-text-secondary);padding:12px 0">Aucune donnée pour ces critères.</div>';return;}
+  el.innerHTML=`<div class="tbl-outer"><div class="tbl-scroll"><table class="sort-table" style="min-width:660px"><thead><tr>
+    <th style="width:75px">Position</th><th class="th-url">Requête</th><th>Impressions</th><th>Vol. SE</th><th>Clics</th><th>CTR</th><th class="th-url">URL cible</th>
+  </tr></thead><tbody>`+rows.map(r=>`<tr>
+    <td>${kwPosBadge(r['Position'])}</td>
+    <td class="td-url" style="font-size:12px" title="${escHtml(r['Requête'])}">${escHtml(r['Requête'])}</td>
+    <td>${escHtml(r['Impressions'])}</td>
+    <td>${escHtml(r['Volume SE'])}</td>
+    <td>${escHtml(r['Clics'])}</td>
+    <td>${escHtml(r['CTR'])}</td>
+    <td class="td-url" style="font-size:12px" title="${escHtml(r['URL'])}">${escHtml(r['URL'])}</td>
+  </tr>`).join('')+`</tbody></table></div></div>`;
+}
+function switchKWSubTab(t){
+  kwSub=t;
+  const ss=kwSubsets();
+  ['quickwins','declin','ctr_anormal','non_couvert'].forEach(k=>{
+    const btn=document.getElementById('kwbtn-'+k);
+    const cnt=document.getElementById('kwcnt-'+k);
+    const cont=document.getElementById('kwcont-'+k);
+    if(btn)btn.classList.toggle('active',k===t);
+    if(cnt)cnt.textContent='('+ss[k].length+')';
+    if(cont)cont.style.display=k===t?'':'none';
+  });
+  renderKWTable('kwtbl-'+t,ss[t]);
+}
+function importKWData(){
+  const raw=(document.getElementById('kw-area').value||'').trim();
+  const msg=document.getElementById('kw-msg');
+  if(!raw){msg.textContent='Rien à importer.';return;}
+  try{
+    const all=parseKW(raw);
+    kwData=all.filter(r=>r['Site']==='COM');
+    msg.style.color='var(--color-text-secondary)';
+    msg.textContent=`✓ ${kwData.length} mots-clés retenus (Site=COM) sur ${all.length} lignes`;
+    switchKWSubTab(kwSub);
+  }catch(err){msg.style.color='#A32D2D';msg.textContent='Erreur : '+err.message;}
+}
+function clearKWData(){kwData=[];document.getElementById('kw-msg').textContent='Données effacées.';switchKWSubTab(kwSub);}
+function copyKWCSV(k,btn){
+  const ss=kwSubsets();const rows=ss[k]||[];
+  const cols=['Position','Requête','Impressions','Volume SE','Clics','CTR','URL'];
+  const csv=[cols.join(','),...rows.map(r=>cols.map(c=>`"${(r[c]||'').replace(/"/g,'""')}"`).join(','))].join('\n');
+  navigator.clipboard.writeText(csv).then(()=>{const orig=btn.textContent;btn.textContent='Copié !';setTimeout(()=>btn.textContent=orig,1500);});
 }
 
 renderTable();
