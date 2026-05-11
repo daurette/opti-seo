@@ -160,7 +160,7 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
 
     <!-- IMPORT HUB -->
     <div id="tab-import" style="display:none">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem">
 
         <!-- Bloc A : Contenu du site -->
         <div>
@@ -208,6 +208,24 @@ textarea{width:100%;min-height:100px;font-size:12px;font-family:var(--font-mono)
               <p id="import-msg" style="font-size:12px;margin-top:8px;color:var(--color-text-secondary)"></p>
             </div>
           </details>
+        </div>
+
+        <!-- Bloc C : Mots-clés -->
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Mots-clés</div>
+          <div class="info-box" style="margin-bottom:10px">
+            Colonnes : <code>Requête, Site, URL, Clics, Impressions, Volume SE, CTR, Position, Variation de position</code><br>
+            Seules les lignes <strong>Site = COM</strong> sont retenues.
+          </div>
+          <div id="kw-drop" class="m3-drop" ondragover="kwDragOver(event)" ondragleave="kwDragLeave(event)" ondrop="kwOnDrop(event)" onclick="document.getElementById('kw-file').click()">
+            <div id="kw-drop-inner">
+              <div style="font-size:28px;color:var(--color-text-tertiary);margin-bottom:8px">⬇</div>
+              <div style="font-size:13px;font-weight:500">Glissez-déposez le CSV ou cliquez</div>
+              <div style="font-size:12px;color:var(--color-text-secondary);margin-top:5px">Utilisé par l'onglet Mots-clés</div>
+            </div>
+            <input type="file" id="kw-file" accept=".csv" style="display:none" onclick="event.stopPropagation()" onchange="kwOnFile(this.files[0])">
+          </div>
+          <p id="kw-drop-msg" style="font-size:12px;margin-top:6px;color:var(--color-text-secondary)"></p>
         </div>
 
       </div>
@@ -583,6 +601,22 @@ function impOnFile(f){
     const count=lines.length-1;
     document.getElementById('imp-drop-inner').innerHTML=`<div style="font-size:13px;font-weight:500;color:#0F6E56">✓ ${escHtml(f.name)}</div><div style="font-size:12px;color:#0F6E56;margin-top:3px">${count} lignes — cliquer pour changer</div>`;
     document.getElementById('imp-file-msg').textContent='';
+  };
+  r.readAsText(f,'UTF-8');
+}
+
+function kwDragOver(e){e.preventDefault();document.getElementById('kw-drop').classList.add('dragover');}
+function kwDragLeave(){document.getElementById('kw-drop').classList.remove('dragover');}
+function kwOnDrop(e){e.preventDefault();kwDragLeave();const f=e.dataTransfer.files[0];if(f)kwOnFile(f);}
+function kwOnFile(f){
+  const r=new FileReader();
+  r.onload=ev=>{
+    document.getElementById('kw-area').value=ev.target.result.replace(/^﻿/,'');
+    importKWData();
+    document.getElementById('kw-drop').classList.remove('dragover');
+    document.getElementById('kw-drop').classList.add('loaded');
+    document.getElementById('kw-drop-inner').innerHTML=`<div style="font-size:13px;font-weight:500;color:#0F6E56">✓ ${escHtml(f.name)}</div><div style="font-size:12px;color:#0F6E56;margin-top:3px">${kwData.length} mots-clés retenus — cliquer pour changer</div>`;
+    document.getElementById('kw-drop-msg').textContent='';
   };
   r.readAsText(f,'UTF-8');
 }
